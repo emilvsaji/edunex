@@ -1,0 +1,586 @@
+import axios from 'axios';
+import { Country, University, CurrencyData, SearchResults } from '@/types';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+
+export const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('edunex_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
+// API Helper Services
+export const countryService = {
+  getAll: async (): Promise<Country[]> => {
+    try {
+      const res = await api.get('/countries');
+      return res.data.data;
+    } catch (err) {
+      console.warn('Backend API unavailable, serving client fallback database');
+      return getFallbackCountries();
+    }
+  },
+  getBySlug: async (slug: string): Promise<Country> => {
+    try {
+      const res = await api.get(`/countries/${slug}`);
+      return res.data.data;
+    } catch (err) {
+      console.warn('Backend API unavailable, serving client fallback Germany dashboard dataset');
+      return getFallbackGermanyData();
+    }
+  },
+};
+
+export const universityService = {
+  getFiltered: async (params?: any): Promise<University[]> => {
+    try {
+      const res = await api.get('/universities', { params });
+      return res.data.data;
+    } catch (err) {
+      const germany = getFallbackGermanyData();
+      let list = germany.universities || [];
+
+      if (params?.search) {
+        const q = String(params.search).toLowerCase();
+        list = list.filter(u => u.name.toLowerCase().includes(q) || u.cityName.toLowerCase().includes(q));
+      }
+      if (params?.city && params.city !== 'All') {
+        list = list.filter(u => u.cityName === params.city);
+      }
+      if (params?.type && params.type !== 'All') {
+        list = list.filter(u => u.type === params.type);
+      }
+      if (params?.degree && params.degree !== 'All') {
+        list = list.filter(u => u.degrees.includes(params.degree));
+      }
+      if (params?.sortBy === 'qsRanking') {
+        list = [...list].sort((a, b) => (params.sortOrder === 'desc' ? b.qsRanking - a.qsRanking : a.qsRanking - b.qsRanking));
+      }
+      return list;
+    }
+  },
+};
+
+export const currencyService = {
+  getRate: async (base = 'EUR', target = 'INR'): Promise<CurrencyData> => {
+    try {
+      const res = await api.get('/currency/rate', { params: { base, target } });
+      return res.data.data;
+    } catch (err) {
+      return {
+        base,
+        target,
+        rate: 91.25,
+        lastUpdated: new Date().toISOString(),
+        history: [
+          { month: 'Mar', rate: '89.88' },
+          { month: 'Apr', rate: '90.34' },
+          { month: 'May', rate: '90.75' },
+          { month: 'Jun', rate: '91.02' },
+          { month: 'Jul', rate: '91.15' },
+          { month: 'Aug', rate: '91.25' },
+        ],
+      };
+    }
+  },
+};
+
+export const searchService = {
+  global: async (query: string): Promise<SearchResults> => {
+    try {
+      const res = await api.get('/search', { params: { q: query } });
+      return res.data.data;
+    } catch (err) {
+      const germany = getFallbackGermanyData();
+      const q = query.toLowerCase();
+      return {
+        universities: (germany.universities || []).filter(u => u.name.toLowerCase().includes(q) || u.cityName.toLowerCase().includes(q)),
+        scholarships: (germany.scholarships || []).filter(s => s.title.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)),
+        documents: (germany.documents || []).filter(d => d.title.toLowerCase().includes(q)),
+        faqs: (germany.faqs || []).filter(f => f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q)),
+        resources: (germany.officialResources || []).filter(r => r.title.toLowerCase().includes(q)),
+      };
+    }
+  },
+};
+
+// Fallback datasets for zero-downtime client resiliency
+function getFallbackCountries(): Country[] {
+  return [
+    {
+      id: 'c-de',
+      name: 'Germany',
+      slug: 'germany',
+      code: 'DE',
+      flagEmoji: '🇩🇪',
+      avgTuition: '€0 - €3,000 / year',
+      avgLivingCost: '€934 - €1,100 / month',
+      workHours: '140 full days / year',
+      popularIntake: 'Winter (Oct) & Summer (Apr)',
+      shortDesc: 'Europe’s leading study destination offering tuition-free public university education, world-class STEM research, and solid post-study career opportunities.',
+      isComplete: true,
+    },
+    {
+      id: 'c-ca',
+      name: 'Canada',
+      slug: 'canada',
+      code: 'CA',
+      flagEmoji: '🇨🇦',
+      avgTuition: 'CAD $15,000 - $35,000 / year',
+      avgLivingCost: 'CAD $1,200 - $2,000 / month',
+      workHours: '20 hours / week',
+      popularIntake: 'Fall (Sep) & Winter (Jan)',
+      shortDesc: 'Renowned for world-class universities, welcoming policy, and generous Post-Graduation Work Permits.',
+      isComplete: false,
+    },
+    {
+      id: 'c-gb',
+      name: 'United Kingdom',
+      slug: 'united-kingdom',
+      code: 'GB',
+      flagEmoji: '🇬🇧',
+      avgTuition: '£12,000 - £30,000 / year',
+      avgLivingCost: '£1,000 - £1,500 / month',
+      workHours: '20 hours / week',
+      popularIntake: 'Autumn (Sep) & Spring (Jan)',
+      shortDesc: 'Home to Oxford, Cambridge, and 1-year intensive Master degrees with Graduate Route visas.',
+      isComplete: false,
+    },
+    {
+      id: 'c-au',
+      name: 'Australia',
+      slug: 'australia',
+      code: 'AU',
+      flagEmoji: '🇦🇺',
+      avgTuition: 'AUD $20,000 - $45,000 / year',
+      avgLivingCost: 'AUD $1,400 - $2,200 / month',
+      workHours: '48 hours / fortnight',
+      popularIntake: 'Feb / Mar & Jul / Aug',
+      shortDesc: 'High quality of life, top-ranked universities, breathtaking climate, and extended post-study work rights.',
+      isComplete: false,
+    },
+    {
+      id: 'c-ie',
+      name: 'Ireland',
+      slug: 'ireland',
+      code: 'IE',
+      flagEmoji: '🇮🇪',
+      avgTuition: '€9,800 - €25,000 / year',
+      avgLivingCost: '€1,000 - €1,800 / month',
+      workHours: '20 hours / week',
+      popularIntake: 'Autumn (Sep) & Spring (Jan)',
+      shortDesc: 'Silicon Valley of Europe housing global tech headquarters with 2-year post-study work visa for Masters.',
+      isComplete: false,
+    },
+    {
+      id: 'c-fr',
+      name: 'France',
+      slug: 'france',
+      code: 'FR',
+      flagEmoji: '🇫🇷',
+      avgTuition: '€2,770 - €15,000 / year',
+      avgLivingCost: '€800 - €1,400 / month',
+      workHours: '60% of annual working time',
+      popularIntake: 'September & January',
+      shortDesc: 'Affordable public university tuition, rich culture, and prestigious Grand Écoles.',
+      isComplete: false,
+    },
+    {
+      id: 'c-nl',
+      name: 'Netherlands',
+      slug: 'netherlands',
+      code: 'NL',
+      flagEmoji: '🇳🇱',
+      avgTuition: '€6,000 - €15,000 / year',
+      avgLivingCost: '€900 - €1,500 / month',
+      workHours: '16 hours / week',
+      popularIntake: 'September & February',
+      shortDesc: 'Highest English proficiency in non-English Europe, innovative teaching, and tech startup hubs.',
+      isComplete: false,
+    },
+    {
+      id: 'c-nz',
+      name: 'New Zealand',
+      slug: 'new-zealand',
+      code: 'NZ',
+      flagEmoji: '🇳🇿',
+      avgTuition: 'NZD $22,000 - $35,000 / year',
+      avgLivingCost: 'NZD $1,200 - $1,800 / month',
+      workHours: '20 hours / week',
+      popularIntake: 'February & July',
+      shortDesc: 'Safe, serene landscape, practical industry education, and post-study work opportunities.',
+      isComplete: false,
+    },
+    {
+      id: 'c-se',
+      name: 'Sweden',
+      slug: 'sweden',
+      code: 'SE',
+      flagEmoji: '🇸🇪',
+      avgTuition: 'SEK 80,000 - 140,000 / year',
+      avgLivingCost: 'SEK 9,500 / month',
+      workHours: 'No legal hourly limit for full-time students',
+      popularIntake: 'Autumn (August)',
+      shortDesc: 'Pioneer in sustainability, equality, and cutting-edge tech innovations.',
+      isComplete: false,
+    },
+    {
+      id: 'c-fi',
+      name: 'Finland',
+      slug: 'finland',
+      code: 'FI',
+      flagEmoji: '🇫🇮',
+      avgTuition: '€6,000 - €12,000 / year',
+      avgLivingCost: '€700 - €1,100 / month',
+      workHours: '30 hours / week',
+      popularIntake: 'Autumn (September)',
+      shortDesc: 'Voted happiest country in the world with world-best education system and post-study PR pathway.',
+      isComplete: false,
+    },
+  ];
+}
+
+function getFallbackGermanyData(): Country {
+  return {
+    id: 'c-de',
+    name: 'Germany',
+    slug: 'germany',
+    code: 'DE',
+    flagEmoji: '🇩🇪',
+    avgTuition: '€0 - €3,000 / year',
+    avgLivingCost: '€934 - €1,100 / month',
+    workHours: '140 full days (280 half days) / year',
+    popularIntake: 'Winter (Oct) & Summer (Apr)',
+    shortDesc: 'Europe’s leading study destination offering tuition-free public university education, world-class STEM research, and solid post-study career opportunities.',
+    isComplete: true,
+    capital: 'Berlin',
+    currency: 'Euro (€)',
+    language: 'German (English for many Masters)',
+    population: '84.4 Million',
+    intStudentsCount: '458,210+',
+    semesterContrib: '€150 - €400 / semester (Includes Transit Pass)',
+    blockedAccountAmt: '€11,904 / year (€992 / month)',
+    minWage: '€12.41 / hour',
+    publicUnivCount: 300,
+    privateUnivCount: 100,
+    topCities: JSON.stringify(['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Aachen', 'Karlsruhe']),
+    popularCourses: JSON.stringify(['Computer Science', 'Automotive Engineering', 'Data Science', 'Renewable Energy', 'Mechanical Engineering', 'International Business']),
+    climate: 'Temperate (Mild summers, cool winters: -2°C to 25°C)',
+    timeDiff: 'UTC+1 (CET) / UTC+2 (CEST)',
+    safetyIndex: '75.2 (Very Safe)',
+    cities: [
+      { id: '1', countryId: 'c-de', name: 'Munich', avgRent: 650, avgFood: 250, avgTransport: 49, avgUtilities: 110, avgInternet: 30, avgEntertainment: 120, totalMonthly: 1209, isPopular: true },
+      { id: '2', countryId: 'c-de', name: 'Berlin', avgRent: 550, avgFood: 230, avgTransport: 49, avgUtilities: 95, avgInternet: 28, avgEntertainment: 110, totalMonthly: 1062, isPopular: true },
+      { id: '3', countryId: 'c-de', name: 'Aachen', avgRent: 420, avgFood: 200, avgTransport: 0, avgUtilities: 85, avgInternet: 25, avgEntertainment: 80, totalMonthly: 810, isPopular: true },
+      { id: '4', countryId: 'c-de', name: 'Karlsruhe', avgRent: 450, avgFood: 210, avgTransport: 0, avgUtilities: 90, avgInternet: 25, avgEntertainment: 85, totalMonthly: 860, isPopular: true },
+      { id: '5', countryId: 'c-de', name: 'Frankfurt', avgRent: 600, avgFood: 240, avgTransport: 49, avgUtilities: 105, avgInternet: 30, avgEntertainment: 115, totalMonthly: 1139, isPopular: true },
+      { id: '6', countryId: 'c-de', name: 'Hamburg', avgRent: 580, avgFood: 235, avgTransport: 49, avgUtilities: 100, avgInternet: 28, avgEntertainment: 105, totalMonthly: 1097, isPopular: true },
+    ],
+    universities: [
+      {
+        id: 'u-1',
+        countryId: 'c-de',
+        name: 'Technical University of Munich (TUM)',
+        slug: 'technical-university-of-munich',
+        type: 'Public',
+        qsRanking: 28,
+        cityName: 'Munich',
+        logoUrl: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€150 - €1,500 / semester',
+        tuitionFee: '€0 - €6,000 / year',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.tum.de/en/',
+        admissionReqSummary: 'Bachelor degree with top GPA, IELTS 6.5+ or TOEFL 88+, GRE required for CSE & Data Science.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'Germany’s top-ranked technical university, known as the "Entrepreneurial University" with close ties to BMW, Siemens, and SAP.',
+      },
+      {
+        id: 'u-2',
+        countryId: 'c-de',
+        name: 'Ludwig Maximilian University of Munich (LMU)',
+        slug: 'lmu-munich',
+        type: 'Public',
+        qsRanking: 54,
+        cityName: 'Munich',
+        logoUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€152 / semester',
+        tuitionFee: '€0 (Tuition Free)',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.lmu.de/en/',
+        admissionReqSummary: 'High academic standing, IELTS 7.0 for English Master, APS certificate for Indian students.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'One of Europe’s premier research institutions with over 500 years of academic distinction across Medicine, Natural Sciences, and Humanities.',
+      },
+      {
+        id: 'u-3',
+        countryId: 'c-de',
+        name: 'RWTH Aachen University',
+        slug: 'rwth-aachen-university',
+        type: 'Public',
+        qsRanking: 99,
+        cityName: 'Aachen',
+        logoUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€315 / semester',
+        tuitionFee: '€0 (Tuition Free)',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.rwth-aachen.de/cms/~a/ROOT/l/en/',
+        admissionReqSummary: 'Strong technical credit alignment (Subject matching 100%), GRE General recommended.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'Largest technical university in Germany and part of the TU9 alliance. Renowned worldwide for Mechanical, Automotive, and Electrical Engineering.',
+      },
+      {
+        id: 'u-4',
+        countryId: 'c-de',
+        name: 'Technical University of Berlin (TU Berlin)',
+        slug: 'tu-berlin',
+        type: 'Public',
+        qsRanking: 154,
+        cityName: 'Berlin',
+        logoUrl: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€308 / semester',
+        tuitionFee: '€0 (Tuition Free)',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.tu.berlin/en/',
+        admissionReqSummary: 'Bachelor degree in relevant domain, IELTS 6.5+, Uni-Assist VPD requirement.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'Member of TU9 situated in the vibrant capital of Germany, offering cutting-edge programs in CS, AI, and Urban Planning.',
+      },
+      {
+        id: 'u-5',
+        countryId: 'c-de',
+        name: 'Karlsruhe Institute of Technology (KIT)',
+        slug: 'kit-karlsruhe',
+        type: 'Public',
+        qsRanking: 102,
+        cityName: 'Karlsruhe',
+        logoUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€1,500 / semester',
+        tuitionFee: '€3,000 / year',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.kit.edu/english/',
+        admissionReqSummary: 'High math & physics aptitude, German B2 or IELTS 6.5 depending on track.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'The Research University in the Helmholtz Association, globally renowned for Energy Tech, Computer Science, and Engineering.',
+      },
+      {
+        id: 'u-6',
+        countryId: 'c-de',
+        name: 'Humboldt University of Berlin',
+        slug: 'humboldt-university-berlin',
+        type: 'Public',
+        qsRanking: 126,
+        cityName: 'Berlin',
+        logoUrl: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=150&auto=format&fit=crop&q=80',
+        coverUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1200&auto=format&fit=crop&q=80',
+        semesterFee: '€315 / semester',
+        tuitionFee: '€0 (Tuition Free)',
+        hasEnglishPrograms: true,
+        officialWebsite: 'https://www.hu-berlin.de/en',
+        admissionReqSummary: 'Strong academic record, statement of purpose, English proficiency C1 for social sciences.',
+        degrees: 'Bachelor, Master, PhD',
+        description: 'Alma mater of Albert Einstein and Max Planck, leading world research in Economics, Life Sciences, and Philosophy.',
+      },
+    ],
+    requirements: [
+      {
+        id: 'r-1',
+        degreeLevel: 'Master',
+        academicReq: '4-year Bachelor degree (B.Tech / B.E / B.Sc) from H+ recognized university on Anabin database.',
+        minCGPA: '7.5 / 10 (German Grade 2.5 or better)',
+        ieltsScore: '6.5 overall (Min 6.0 in each band)',
+        toeflScore: '88 iBT',
+        germanReq: 'A1/A2 recommended for living; C1 required for German tracks.',
+        apsRequired: true,
+        greGmatReq: 'GRE required for TUM CS & Data Science (Quant 164+)',
+        portfolioReq: 'Architecture / Fine Arts only',
+        experienceReq: 'Work experience appreciated but not mandatory',
+        notes: 'Stage 1 Aptitude Assessment evaluates CGPA & Credit match.',
+      },
+      {
+        id: 'r-2',
+        degreeLevel: 'Bachelor',
+        academicReq: '12th Grade Board Exam + Studienkolleg (Feststellungsprüfung) OR 1 year recognized Indian degree.',
+        minCGPA: '85% in 12th Board Exams (CBSE/ISC)',
+        ieltsScore: '6.5',
+        toeflScore: '80',
+        germanReq: 'B2 / C1 TestDaF mandatory for most Bachelor tracks.',
+        apsRequired: true,
+        greGmatReq: 'Not applicable',
+        portfolioReq: 'Not applicable',
+        experienceReq: 'None',
+        notes: 'Indian students with JEE Advanced rank can bypass Studienkolleg.',
+      },
+      {
+        id: 'r-3',
+        degreeLevel: 'PhD',
+        academicReq: 'Master degree (M.Tech/M.Sc) with published research capability.',
+        minCGPA: '8.0 / 10',
+        ieltsScore: '7.0',
+        toeflScore: '95',
+        germanReq: 'A1 basic German',
+        apsRequired: true,
+        greGmatReq: 'Optional',
+        portfolioReq: 'Research Proposal (15-20 pages)',
+        experienceReq: 'Prior published research papers highly preferred.',
+        notes: 'Direct supervisor agreement required prior to enrollment.',
+      },
+    ],
+    documents: [
+      { id: 'd-1', title: 'Valid Passport', category: 'General', description: 'Original passport with at least 12 months validity.', purpose: 'Identity verification for APS, Uni-Assist & Visa.', commonMistakes: 'Expired passport, name mismatch with marksheets.', isMandatory: true, stage: 'APS' },
+      { id: 'd-2', title: 'Academic Transcripts & Mark Sheets', category: 'Academic', description: 'Official consolidated semester marksheets.', purpose: 'Academic evaluation by APS and Universities.', commonMistakes: 'Unapproved online portal screenshots.', isMandatory: true, stage: 'APS' },
+      { id: 'd-3', title: 'Bachelor / School Degree Certificate', category: 'Academic', description: 'Original Degree Certificate or Provisional Certificate.', purpose: 'Proof of degree completion.', commonMistakes: 'Submitting course completion letter without degree certificate.', isMandatory: true, stage: 'APS' },
+      { id: 'd-4', title: 'APS Certificate (Akademische Prüfstelle)', category: 'Academic', description: 'Verification certificate confirming authenticity of Indian academic documents.', purpose: 'Mandatory prerequisite for German student visa in India.', commonMistakes: 'Delaying application. Takes 4-8 weeks.', isMandatory: true, stage: 'Visa' },
+      { id: 'd-5', title: 'Curriculum Vitae (Tabular CV)', category: 'Academic', description: 'Europass style chronological CV without gaps.', purpose: 'Evaluation of work experience & projects.', commonMistakes: 'Unexplained gaps in education/career.', isMandatory: true, stage: 'University Application' },
+      { id: 'd-6', title: 'Statement of Purpose (SOP)', category: 'Academic', description: '1-2 page tailored letter explaining motivation and academic fit.', purpose: 'Evaluating candidate academic alignment.', commonMistakes: 'Generic SOP reused across multiple universities.', isMandatory: true, stage: 'University Application' },
+      { id: 'd-7', title: 'Letters of Recommendation (LOR)', category: 'Academic', description: '2 Letters on official university letterhead.', purpose: 'Academic appraisal of candidate capability.', commonMistakes: 'Missing official letterhead or stamp.', isMandatory: true, stage: 'University Application' },
+      { id: 'd-8', title: 'English Score Card (IELTS / TOEFL)', category: 'Academic', description: 'Official score card (IELTS Academic 6.5+ or TOEFL 88+).', purpose: 'Proof of English language proficiency.', commonMistakes: 'Submitting IELTS General module.', isMandatory: true, stage: 'University Application' },
+      { id: 'd-9', title: 'Blocked Account Confirmation (Sperrkonto)', category: 'Financial', description: 'Official confirmation showing €11,904 deposited.', purpose: 'Proof of financial means for 1 year in Germany.', commonMistakes: 'Transferring incorrect buffer amount.', isMandatory: true, stage: 'Visa' },
+      { id: 'd-10', title: 'Health Insurance Certificate', category: 'Visa', description: 'Incoming travel insurance + German health insurance confirmation (TK/Expatrio).', purpose: 'Medical coverage required for visa and university enrollment.', commonMistakes: 'Non-compliant insurance provider.', isMandatory: true, stage: 'Visa' },
+    ],
+    apsGuides: [
+      {
+        id: 'aps-1',
+        title: 'Complete APS Certificate Guide for Germany',
+        eligibility: 'All Indian nationals with degrees/diplomas applying for higher education in Germany.',
+        requiredDocsJson: JSON.stringify([
+          'Printed and signed APS application form',
+          'Copy of Aadhaar Card linked with mobile number',
+          'Copy of valid Passport (first and last page)',
+          'Class 10th Marksheet & Certificate',
+          'Class 12th Marksheet & Certificate',
+          'Bachelor Marksheets (All semesters)',
+          'Bachelor Degree / Provisional Certificate',
+          'Language Proficiency Certificate (IELTS/TOEFL)',
+          'Bank Payment Receipt of ₹18,000 APS Fee',
+          'University Professor Email & Student Portal Credentials',
+        ]),
+        feeAmount: '18,000',
+        feeCurrency: 'INR',
+        timelineWeeks: '4 - 8 weeks',
+        trackingUrl: 'https://aps-india.de/',
+        officialPortalUrl: 'https://aps-india.de/',
+        applicationStepsJson: JSON.stringify([
+          'Register online on official APS India portal (aps-india.de).',
+          'Fill in personal, educational, and university details.',
+          'Pay processing fee of ₹18,000 via online bank transfer.',
+          'Gather self-attested document copies.',
+          'Courier printed application form + document dossier to APS Office New Delhi.',
+          'APS team verifies credentials with your Indian university.',
+          'Digital APS Certificate is issued via email upon verification.',
+        ]),
+        faqsJson: JSON.stringify([
+          { q: 'Is APS mandatory for all Indian students?', a: 'Yes, mandatory for all Indian student visas since Nov 2022.' },
+          { q: 'Does APS certificate expire?', a: 'No, valid indefinitely as long as your qualifications remain unchanged.' },
+          { q: 'What if university email verification is delayed?', a: 'Provide student portal credentials in your application so APS can verify directly.' },
+        ]),
+      },
+    ],
+    visas: [
+      {
+        id: 'v-1',
+        visaType: 'National Student Visa (Category D)',
+        feeAmount: '€75 (~₹6,800)',
+        processingTimeWeeks: '4 - 8 weeks',
+        biometricsInfo: 'Mandatory biometrics taken at VFS Global center.',
+        embassyPortalUrl: 'https://india.diplo.de/in-en/service/-/2552164',
+        stepsJson: JSON.stringify([
+          'Receive official University Admission Letter (Zulassungsbescheid).',
+          'Obtain digital APS Certificate.',
+          'Open Blocked Account (Sperrkonto) and deposit €11,904.',
+          'Obtain compliant Health Insurance confirmation.',
+          'Book VFS Global appointment for German Student Visa category.',
+          'Prepare VIDEX application form and 2 identical document sets.',
+          'Attend VFS appointment for biometric capture.',
+          'Track passport via VFS portal until stamped visa passport delivery.',
+        ]),
+        requiredDocsJson: JSON.stringify([
+          'Valid Passport + 2 photocopies',
+          '2 Completed VIDEX application forms signed',
+          '3 Biometric passport photographs (35mm x 45mm, white background)',
+          'University Admission Letter / Offer Letter',
+          'APS Certificate (Original)',
+          'Proof of Blocked Account (€11,904 confirmation)',
+          'Proof of Health Insurance',
+          'Curriculum Vitae (CV) & Motivation Letter',
+          'Academic Marksheets & Degree Certificates',
+          'Proof of English/German Language Proficiency',
+        ]),
+        rejectionReasonsJson: JSON.stringify([
+          'Incomplete financial proof or unverified blocked account source.',
+          'Weak or generic Motivation Letter showing lack of clear academic intent.',
+          'Submitting non-APS certified academic marksheets.',
+          'Mismatch between prior study background and proposed Master degree without justification.',
+          'Lack of basic language skills required for the course.',
+        ]),
+      },
+    ],
+    timelines: [
+      { id: 't-1', monthMark: '-12 Months', title: 'Research & Language Prep', description: 'Explore DAAD course catalog, shortlist target universities, and start IELTS and German language study.', actionsJson: JSON.stringify(['Browse DAAD.de database', 'Begin IELTS prep', 'Register for German A1 at Goethe Institute']), icon: 'Search', order: 1 },
+      { id: 't-2', monthMark: '-10 Months', title: 'Language Tests', description: 'Take IELTS Academic (Aim 6.5+) and GRE for top CS programs.', actionsJson: JSON.stringify(['Take IELTS exam', 'Order official test score reports']), icon: 'Award', order: 2 },
+      { id: 't-3', monthMark: '-8 Months', title: 'APS Certification', description: 'Apply for APS India certification early! Courier documents to Delhi office.', actionsJson: JSON.stringify(['Register on aps-india.de', 'Pay ₹18,000 fee', 'Send physical document bundle']), icon: 'FileCheck', order: 3 },
+      { id: 't-4', monthMark: '-6 Months', title: 'Uni-Assist & University Applications', description: 'Submit applications via Uni-Assist or university direct portals.', actionsJson: JSON.stringify(['Create Uni-Assist account', 'Upload SOP, LOR, and transcripts', 'Pay Uni-Assist evaluation fees']), icon: 'Send', order: 4 },
+      { id: 't-5', monthMark: '-4 Months', title: 'Admission & Blocked Account', description: 'Receive offer letter. Immediately open Blocked Account and transfer €11,904.', actionsJson: JSON.stringify(['Accept university offer', 'Open Expatrio/Fintiba account', 'Transfer blocked funds & buffer']), icon: 'Landmark', order: 5 },
+      { id: 't-6', monthMark: '-3 Months', title: 'Health Insurance & Visa Slot', description: 'Set up German health insurance and book VFS Student Visa slot.', actionsJson: JSON.stringify(['Activate TK Health Insurance package', 'Book VFS appointment', 'Fill VIDEX online visa form']), icon: 'ShieldCheck', order: 6 },
+      { id: 't-7', monthMark: '-2 Months', title: 'Visa Interview & Accommodation', description: 'Attend VFS biometric appointment. Start hunting for student dorms & WGs.', actionsJson: JSON.stringify(['Attend VFS visa appointment', 'Apply to Studierendenwerk dorm queue', 'Search WG-Gesucht.de']), icon: 'Home', order: 7 },
+      { id: 't-8', monthMark: '-1 Month', title: 'Flight Booking & Packing', description: 'Receive stamped visa passport, book student flight ticket, and pack essential documents.', actionsJson: JSON.stringify(['Book one-way flight ticket', 'Exchange EUR cash (€500-1000)', 'Pack forex card & document originals']), icon: 'Plane', order: 8 },
+      { id: 't-9', monthMark: '0 Month (Arrival)', title: 'Welcome to Germany!', description: 'Complete City Registration (Anmeldung), activate bank account payout, and complete University Enrollment.', actionsJson: JSON.stringify(['Complete City Registration (Anmeldung)', 'Activate local bank account payout', 'Attend Orientation Week']), icon: 'MapPin', order: 9 },
+    ],
+    scholarships: [
+      { id: 's-1', countryId: 'c-de', title: 'DAAD EPOS Postgraduate Scholarship', providerType: 'DAAD', fundingAmount: '€934 / month + Travel Stipend + Health Insurance', degreeLevel: 'Master, PhD', deadline: 'August - October', eligibility: 'Applicants with at least 2 years work experience.', officialWebsite: 'https://www.daad.de/en/', description: 'Full funding for postgraduate courses in engineering, environmental sciences, and public health.' },
+      { id: 's-2', countryId: 'c-de', title: 'Deutschlandstipendium', providerType: 'Government', fundingAmount: '€300 / month', degreeLevel: 'Bachelor, Master', deadline: 'July - September', eligibility: 'High academic achievers registered at participating German universities.', officialWebsite: 'https://www.deutschlandstipendium.de/', description: 'Merit-based scholarship awarded directly by universities.' },
+      { id: 's-3', countryId: 'c-de', title: 'Heinrich Böll Foundation Scholarships', providerType: 'Private', fundingAmount: '€934 / month + Allowances', degreeLevel: 'Master, PhD', deadline: 'March 1 & September 1', eligibility: 'Students with outstanding academic records who embody green political values.', officialWebsite: 'https://www.boell.de/en/scholarships', description: 'Awards around 1,400 scholarships per year to international postgraduate students.' },
+      { id: 's-4', countryId: 'c-de', title: 'Konrad-Adenauer-Stiftung (KAS) Scholarship', providerType: 'Private', fundingAmount: '€861 - €1,200 / month', degreeLevel: 'Master, PhD', deadline: 'July 15', eligibility: 'Under 30 years old, strong academic performance, active voluntary work.', officialWebsite: 'https://www.kas.de/', description: 'Aimed at international students committed to democracy and civic engagement.' },
+      { id: 's-5', countryId: 'c-de', title: 'Erasmus+ Joint Master Degrees', providerType: 'University', fundingAmount: '€1,400 / month + Full Tuition Coverage', degreeLevel: 'Master', deadline: 'January - March', eligibility: 'Global applicants holding relevant Bachelor degree.', officialWebsite: 'https://ec.europa.eu/programmes/erasmus-plus/', description: 'Prestigious EU mobility scholarship allowing study across 2-3 European universities.' },
+    ],
+    livingCosts: [
+      { id: 'lc-1', cityName: 'Munich', rent: 650, food: 250, transport: 49, utilities: 110, internet: 30, entertainment: 120, monthlyTotal: 1209, description: 'Highest cost of living in Germany, compensated by high concentrations of tech industry jobs.' },
+      { id: 'lc-2', cityName: 'Berlin', rent: 550, food: 230, transport: 49, utilities: 95, internet: 28, entertainment: 110, monthlyTotal: 1062, description: 'Vibrant startup capital with diverse cultural scene.' },
+      { id: 'lc-3', cityName: 'Aachen', rent: 420, food: 200, transport: 0, utilities: 85, internet: 25, entertainment: 80, monthlyTotal: 810, description: 'Extremely student-friendly town near Dutch border. Free transit ticket.' },
+      { id: 'lc-4', cityName: 'Karlsruhe', rent: 450, food: 210, transport: 0, utilities: 90, internet: 25, entertainment: 85, monthlyTotal: 860, description: 'Sunny technology hub with moderate rents around KIT.' },
+    ],
+    accommodations: [
+      { id: 'acc-1', type: 'Student Dorm (Studierendenwerk)', avgCostRange: '€230 - €400 / month', depositRequired: '1 - 2 months rent', bookingPortals: 'Studierendenwerk university website', tips: 'Apply to waiting list immediately upon receiving application confirmation!', pros: 'Cheapest option, fully furnished, close to campus.', cons: 'Long waiting lists in major cities.' },
+      { id: 'acc-2', type: 'WG (Shared Flat)', avgCostRange: '€350 - €650 / month', depositRequired: '2 - 3 months rent', bookingPortals: 'WG-Gesucht.de, Kleinanzeigen.de', tips: 'Write personalized messages in German/English introducing your lifestyle.', pros: 'Most popular option for social life, flexible location.', cons: 'Casting interviews can be competitive.' },
+      { id: 'acc-3', type: 'Private Apartment', avgCostRange: '€600 - €1,200 / month', depositRequired: '3 months cold rent', bookingPortals: 'Immobilienscout24.de, HousingAnywhere', tips: 'Ensure landlord provides Wohnungsgeberbestätigung for Anmeldung.', pros: 'Complete privacy, quiet environment.', cons: 'Expensive, often unfurnished.' },
+    ],
+    partTimeJobs: [
+      { id: 'pt-1', allowedHours: '140 full days (280 half days) per calendar year', minWage: '€12.41 / hour', miniJobCap: '€538 / month (Tax-free limit)', taxRules: 'Mini-jobs under €538/month are tax-free.', popularJobsJson: JSON.stringify(['Working Student (Werkstudent IT/Engg): €14 - €22/hr', 'HiWi Research Assistant: €13 - €16/hr', 'English Tutor: €15 - €25/hr', 'Supermarket Cashier: €13 - €15/hr', 'Delivery Rider: €13 - €16/hr']), semesterRules: 'Max 20 hours per week during active semester.', holidayRules: 'Full-time work allowed during official semester break.', jobPortalsJson: JSON.stringify(['Zenjob App', 'StepStone.de', 'Indeed Germany', 'Linkedin Student Jobs']) },
+    ],
+    insurances: [
+      { id: 'ins-1', type: 'Public', providerName: 'Techniker Krankenkasse (TK)', monthlyCost: '~€125 - €130 / month', requirements: 'Mandatory for degree students under 30.', coverageDetails: '100% full coverage for doctors, hospitals, and prescriptions.', pros: 'Voted #1 health insurance, English app.', cons: 'Higher monthly premium than private alternative.', recommendedFor: 'All degree students under 30 looking for comprehensive coverage.' },
+      { id: 'ins-2', type: 'Public', providerName: 'Barmer / AOK', monthlyCost: '~€125 - €130 / month', requirements: 'Mandatory for students under 30.', coverageDetails: 'Comprehensive statutory medical & emergency transport.', pros: 'Extensive physical campus branch network.', cons: 'Slightly slower digital app experience.', recommendedFor: 'Students who prefer local physical service branches.' },
+      { id: 'ins-3', type: 'Private', providerName: 'Mawista / Educare24', monthlyCost: '~€35 - €70 / month', requirements: 'For Studienkolleg, language course students, or over 30.', coverageDetails: 'Basic emergency medical treatment.', pros: 'Very cheap monthly premium.', cons: 'Does not cover pre-existing conditions or routine checkups.', recommendedFor: 'Preparatory course students prior to university matriculation.' },
+    ],
+    officialResources: [
+      { id: 'r-1', title: 'DAAD (German Academic Exchange Service)', category: 'University', url: 'https://www.daad.de/en/', description: 'Official database of all English-taught programs in Germany.', badgeText: 'Official Portal' },
+      { id: 'r-2', title: 'APS India (Akademische Prüfstelle)', category: 'Embassy', url: 'https://aps-india.de/', description: 'Official verification gatekeeper for Indian academic certificates.', badgeText: 'Mandatory' },
+      { id: 'r-3', title: 'Uni-Assist e.V.', category: 'University', url: 'https://www.uni-assist.de/en/', description: 'Central evaluation portal processing international applications.', badgeText: 'Application Portal' },
+      { id: 'r-4', title: 'German Embassy India (Diplo.de)', category: 'Visa', url: 'https://india.diplo.de/in-en/service/-/2552164', description: 'Official visa guidelines and embassy appointments.', badgeText: 'Official Embassy' },
+      { id: 'r-5', title: 'Make it in Germany', category: 'General', url: 'https://www.make-it-in-germany.com/en/', description: 'Official portal of the German Federal Government for students and professionals.', badgeText: 'Gov Portal' },
+      { id: 'r-6', title: 'WG-Gesucht Housing Portal', category: 'Housing', url: 'https://www.wg-gesucht.de/', description: 'Germany’s largest search portal for student shared flats.', badgeText: 'Housing' },
+    ],
+    faqs: [
+      { id: 'faq-1', question: 'Are public universities in Germany really tuition-free?', answer: 'Yes! Public universities in 15 out of 16 German federal states charge €0 tuition fees for both EU and non-EU international students. You only pay a minor semester contribution (€150–€400) which includes a public transport pass.', category: 'Admission', tags: 'tuition, free' },
+      { id: 'faq-2', question: 'What is a Blocked Account (Sperrkonto) and how much is required?', answer: 'A Blocked Account is a mandatory proof of financial resources required for the German student visa. Required amount is €11,904 per year (€992 per month released to your checking account).', category: 'Blocked Account', tags: 'blocked account, money' },
+      { id: 'faq-3', question: 'What is the APS Certificate and is it mandatory for Indian students?', answer: 'Yes, the APS Certificate issued by Akademische Prüfstelle in New Delhi is mandatory for all Indian student visas since Nov 2022.', category: 'APS', tags: 'aps, certificate' },
+      { id: 'faq-4', question: 'Can I work part-time while studying in Germany?', answer: 'Yes! Non-EU international students can legally work up to 140 full days or 280 half days per calendar year. Minimum wage is €12.41 per hour.', category: 'Jobs', tags: 'work, part-time' },
+      { id: 'faq-5', question: 'What is the Post-Study Work Visa in Germany?', answer: 'After graduating from a German university, international students can extend their residence permit for up to 18 months to search for a job related to their degree.', category: 'Visa', tags: 'post study, visa' },
+    ],
+  };
+}

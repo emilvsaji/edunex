@@ -1,0 +1,21 @@
+# Server Dependencies
+node_modules/
+
+# Build Output
+dist/
+build/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Local SQLite Database & Prisma Files
+*.db
+*.db-journal
+prisma/*.db
+prisma/*.db-journal
+
+# Logs & Caches
+*.log
+.cache/

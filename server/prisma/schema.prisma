@@ -1,0 +1,290 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("USER") // USER, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Country {
+  id               String            @id @default(uuid())
+  name             String            @unique
+  slug             String            @unique
+  code             String            @unique // e.g. DE, CA, GB
+  flagEmoji        String
+  avgTuition       String
+  avgLivingCost    String
+  workHours        String
+  popularIntake    String
+  shortDesc        String
+  isComplete       Boolean           @default(false)
+  
+  // Overview details
+  capital          String?
+  currency         String?
+  language         String?
+  population       String?
+  intStudentsCount String?
+  semesterContrib  String?
+  blockedAccountAmt String?
+  minWage          String?
+  publicUnivCount  Int               @default(0)
+  privateUnivCount Int               @default(0)
+  topCities        String?           // JSON string of top cities
+  popularCourses   String?           // JSON string of popular courses
+  climate          String?
+  timeDiff         String?
+  safetyIndex      String?
+  
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  cities           City[]
+  universities     University[]
+  requirements     AdmissionRequirement[]
+  documents        DocumentItem[]
+  apsGuides        APSGuide[]
+  visas            VisaInfo[]
+  timelines        TimelineStep[]
+  scholarships     Scholarship[]
+  livingCosts      LivingCostCity[]
+  accommodations   AccommodationOption[]
+  partTimeJobs     PartTimeJobInfo[]
+  insurances       InsuranceOption[]
+  officialResources OfficialResource[]
+  faqs             FAQItem[]
+}
+
+model City {
+  id            String   @id @default(uuid())
+  countryId     String
+  country       Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  name          String
+  state         String?
+  avgRent       Float
+  avgFood       Float
+  avgTransport  Float
+  avgUtilities  Float
+  avgInternet   Float
+  avgEntertainment Float
+  totalMonthly  Float
+  isPopular     Boolean  @default(false)
+
+  universities  University[]
+  createdAt     DateTime @default(now())
+}
+
+model University {
+  id                String   @id @default(uuid())
+  countryId         String
+  country           Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  cityId            String?
+  city              City?    @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  name              String
+  slug              String   @unique
+  type              String   // Public, Private
+  qsRanking         Int
+  cityName          String
+  logoUrl           String?
+  coverUrl          String?
+  semesterFee       String
+  tuitionFee        String
+  hasEnglishPrograms Boolean @default(true)
+  officialWebsite   String
+  admissionReqSummary String
+  degrees           String   // Comma separated: Bachelor, Master, PhD
+  description       String
+  
+  requirements      AdmissionRequirement[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model AdmissionRequirement {
+  id              String      @id @default(uuid())
+  countryId       String
+  country         Country     @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  universityId    String?
+  university      University? @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  degreeLevel     String      // Bachelor, Master, PhD
+  academicReq     String
+  minCGPA         String
+  ieltsScore      String
+  toeflScore      String
+  germanReq       String
+  apsRequired     Boolean     @default(true)
+  greGmatReq      String?
+  portfolioReq    String?
+  experienceReq   String?
+  notes           String?
+  createdAt       DateTime    @default(now())
+}
+
+model DocumentItem {
+  id             String   @id @default(uuid())
+  countryId      String
+  country        Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  title          String
+  category       String   // Academic, Financial, Visa, General
+  description    String
+  purpose        String
+  sampleUrl      String?
+  commonMistakes String
+  isMandatory    Boolean  @default(true)
+  stage          String   // University Application, APS, Visa, Enrollment
+  createdAt      DateTime @default(now())
+}
+
+model APSGuide {
+  id                String   @id @default(uuid())
+  countryId         String
+  country           Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  title             String
+  eligibility       String
+  requiredDocsJson  String   // JSON string list of required docs
+  feeAmount         String
+  feeCurrency       String   @default("INR")
+  timelineWeeks     String
+  trackingUrl       String
+  officialPortalUrl String
+  applicationStepsJson String // JSON string list of steps
+  faqsJson          String   // JSON string list of Q&As
+  createdAt         DateTime @default(now())
+}
+
+model VisaInfo {
+  id                  String   @id @default(uuid())
+  countryId           String
+  country             Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  visaType            String   // Student Visa, National Visa D
+  feeAmount           String
+  processingTimeWeeks String
+  biometricsInfo      String
+  embassyPortalUrl    String
+  stepsJson           String   // JSON string array of process steps
+  requiredDocsJson    String   // JSON string array of documents
+  rejectionReasonsJson String  // JSON string array of common rejection reasons
+  createdAt           DateTime @default(now())
+}
+
+model TimelineStep {
+  id          String   @id @default(uuid())
+  countryId   String
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  monthMark   String   // e.g. "-12 Months", "-9 Months", "0 Month (Arrival)"
+  title       String
+  description String
+  actionsJson String   // JSON string array of actionable tasks
+  icon        String   @default("Calendar")
+  order       Int
+  createdAt   DateTime @default(now())
+}
+
+model Scholarship {
+  id              String   @id @default(uuid())
+  countryId       String
+  country         Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  title           String
+  providerType    String   // Government, DAAD, University, Private
+  fundingAmount   String
+  degreeLevel     String   // All, Master, PhD, Bachelor
+  deadline        String
+  eligibility     String
+  officialWebsite String
+  description     String
+  createdAt       DateTime @default(now())
+}
+
+model LivingCostCity {
+  id              String   @id @default(uuid())
+  countryId       String
+  country         Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  cityName        String
+  rent            Float
+  food            Float
+  transport       Float
+  utilities       Float
+  internet        Float
+  entertainment   Float
+  monthlyTotal    Float
+  description     String?
+  createdAt       DateTime @default(now())
+}
+
+model AccommodationOption {
+  id              String   @id @default(uuid())
+  countryId       String
+  country         Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  type            String   // Student Dorm, WG (Shared Flat), Private Apartment
+  avgCostRange    String
+  depositRequired String
+  bookingPortals  String   // JSON list or comma separated
+  tips            String
+  pros            String
+  cons            String
+  createdAt       DateTime @default(now())
+}
+
+model PartTimeJobInfo {
+  id                  String   @id @default(uuid())
+  countryId           String
+  country             Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  allowedHours        String
+  minWage             String
+  miniJobCap          String
+  taxRules            String
+  popularJobsJson     String   // JSON list
+  semesterRules       String
+  holidayRules        String
+  jobPortalsJson      String   // JSON list
+  createdAt           DateTime @default(now())
+}
+
+model InsuranceOption {
+  id              String   @id @default(uuid())
+  countryId       String
+  country         Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  type            String   // Public, Private
+  providerName    String   // e.g. TK, Barmer, AOK, Mawista
+  monthlyCost     String
+  requirements    String
+  coverageDetails String
+  pros            String
+  cons            String
+  recommendedFor  String
+  createdAt       DateTime @default(now())
+}
+
+model OfficialResource {
+  id          String   @id @default(uuid())
+  countryId   String
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  title       String
+  category    String   // Embassy, University, Visa, Housing, General
+  url         String
+  description String
+  badgeText   String?
+  createdAt   DateTime @default(now())
+}
+
+model FAQItem {
+  id          String   @id @default(uuid())
+  countryId   String
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  question    String
+  answer      String
+  category    String   // Visa, Admission, Blocked Account, APS, Jobs, General
+  tags        String?  // Comma separated keywords for search
+  createdAt   DateTime @default(now())
+}

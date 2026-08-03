@@ -1,0 +1,86 @@
+# ==========================================
+# Universal Project .gitignore (Root)
+# Covers root, /client, /server & subfolders
+# ==========================================
+
+# Dependencies (Root, client, server)
+node_modules/
+**/node_modules/
+client/node_modules/
+server/node_modules/
+.pnpm-store/
+.yarn/
+.npm/
+
+# Build, Framework & Package Output Directories
+.next/
+**/.next/
+client/.next/
+dist/
+**/dist/
+server/dist/
+out/
+**/out/
+build/
+**/build/
+.turbo/
+**/.turbo/
+.cache/
+**/.cache/
+.parcel-cache/
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Package Manager & Tarball Artifacts
+*.tgz
+*.tar.gz
+yarn-debug.log*
+yarn-error.log*
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs & Debugging
+logs/
+*.log
+
+# Database & Prisma Local Storage
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+server/prisma/*.db
+server/prisma/*.db-journal
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# IDEs & Code Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
