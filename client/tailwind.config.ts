@@ -59,6 +59,10 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Playfair Display', 'Georgia', 'ui-serif', 'serif'],
+      },
       keyframes: {
         'pulse-subtle': {
           '0%, 100%': { opacity: '1' },

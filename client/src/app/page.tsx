@@ -122,31 +122,26 @@ export default function LandingPage() {
         <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.65)' }} />
 
         {/* Hero content — centered */}
-        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-12 py-24 max-w-4xl mx-auto gap-7">
-
-          {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-widest uppercase" style={{ background: 'rgba(0,0,0,0.06)', color: '#374151', border: '1px solid rgba(0,0,0,0.1)' }}>
-            🌍 Next-Gen Study Abroad Intelligence Platform
-          </div>
+        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-12 py-28 max-w-6xl mx-auto gap-8">
 
           {/* Dual-weight headline */}
-          <h1 className="leading-tight">
+          <h1 className="leading-[1.05] font-serif w-full">
             <span
-              className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
+              className="block text-6xl sm:text-7xl lg:text-8xl tracking-tight font-serif"
               style={{ fontWeight: 300, color: '#0B1220' }}
             >
               Study Abroad
             </span>
             <span
-              className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
+              className="block text-6xl sm:text-7xl lg:text-8xl tracking-tight font-serif"
               style={{ fontWeight: 800, color: '#0B1220' }}
             >
-              Made Simple &amp; Precise.
+              Made Simple &amp; Precise
             </span>
           </h1>
 
           {/* Subtext */}
-          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#4B5563' }}>
+          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#1F2937' }}>
             University selection, visa processing, blocked accounts, and living cost optimization — all in one place.
           </p>
 
@@ -281,7 +276,6 @@ export default function LandingPage() {
           </span>
           <h2
             className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight"
-            style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
           >
             Engineered for Academic Success
           </h2>

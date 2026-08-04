@@ -3,67 +3,62 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Compass,
-  Search,
-  Moon,
-  Sun,
-  ChevronDown,
-  LogIn,
   Globe,
+  ChevronDown,
+  Search,
+  Sun,
+  Moon,
+  LogIn,
 } from 'lucide-react';
-import { useTheme } from '../providers/ThemeProvider';
-import GlobalSearchModal from '../search/GlobalSearchModal';
+import GlobalSearchModal from '@/components/search/GlobalSearchModal';
 
 interface Props {
   countryName?: string;
   activeModuleLabel?: string;
 }
 
-// Two-panel dropdown data
 const POPULAR_DESTINATIONS = [
-  { name: 'United Kingdom', flag: '🇬🇧', slug: 'uk' },
-  { name: 'United States', flag: '🇺🇸', slug: 'usa' },
-  { name: 'Canada', flag: '🇨🇦', slug: 'canada' },
-  { name: 'Australia', flag: '🇦🇺', slug: 'australia' },
-  { name: 'New Zealand', flag: '🇳🇿', slug: 'new-zealand' },
-  { name: 'Ireland', flag: '🇮🇪', slug: 'ireland' },
-  { name: 'Dubai (UAE)', flag: '🇦🇪', slug: 'uae' },
-  { name: 'Singapore', flag: '🇸🇬', slug: 'singapore' },
-  { name: 'Malaysia', flag: '🇲🇾', slug: 'malaysia' },
+  { slug: 'germany',   name: 'Germany',        flag: '🇩🇪', available: false },
+  { slug: 'uk',        name: 'United Kingdom', flag: '🇬🇧', available: false },
+  { slug: 'usa',       name: 'United States',  flag: '🇺🇸', available: false },
+  { slug: 'canada',    name: 'Canada',         flag: '🇨🇦', available: false },
+  { slug: 'australia', name: 'Australia',      flag: '🇦🇺', available: false },
+  { slug: 'france',    name: 'France',         flag: '🇫🇷', available: false },
 ];
 
 const EUROPE_DESTINATIONS = [
-  { name: 'Germany', flag: '🇩🇪', slug: 'germany', available: true },
-  { name: 'France', flag: '🇫🇷', slug: 'france' },
-  { name: 'Netherlands', flag: '🇳🇱', slug: 'netherlands' },
-  { name: 'Italy', flag: '🇮🇹', slug: 'italy' },
-  { name: 'Spain', flag: '🇪🇸', slug: 'spain' },
-  { name: 'Sweden', flag: '🇸🇪', slug: 'sweden' },
-  { name: 'Finland', flag: '🇫🇮', slug: 'finland' },
-  { name: 'Poland', flag: '🇵🇱', slug: 'poland' },
+  { slug: 'germany',        name: 'Germany',        flag: '🇩🇪', available: true  },
+  { slug: 'netherlands',    name: 'Netherlands',    flag: '🇳🇱', available: false },
+  { slug: 'sweden',         name: 'Sweden',         flag: '🇸🇪', available: false },
+  { slug: 'austria',        name: 'Austria',        flag: '🇦🇹', available: false },
+  { slug: 'switzerland',    name: 'Switzerland',    flag: '🇨🇭', available: false },
+  { slug: 'italy',          name: 'Italy',          flag: '🇮🇹', available: false },
+  { slug: 'spain',          name: 'Spain',          flag: '🇪🇸', available: false },
+  { slug: 'poland',         name: 'Poland',         flag: '🇵🇱', available: false },
 ];
 
-// Split array into 2-column rows
 function toRows<T>(arr: T[], cols = 2): T[][] {
   const rows: T[][] = [];
-  for (let i = 0; i < arr.length; i += cols) rows.push(arr.slice(i, i + cols));
+  for (let i = 0; i < arr.length; i += cols) {
+    rows.push(arr.slice(i, i + cols));
+  }
   return rows;
 }
 
-export default function TopNavbar({ countryName = 'Germany', activeModuleLabel = 'Overview' }: Props) {
-  const { theme, setTheme } = useTheme();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+export default function TopNavbar({ countryName, activeModuleLabel }: Props) {
   const [countriesOpen, setCountriesOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [theme, setTheme] = useState('light');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    function handleOutsideClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setCountriesOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
   const popularRows = toRows(POPULAR_DESTINATIONS);
@@ -71,19 +66,22 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
 
   return (
     <>
-      {/* Navbar — dark navy matching hero */}
+      {/* Navbar */}
       <header
-        className="sticky top-0 z-40 w-full backdrop-blur-md border-b px-6 sm:px-12 lg:px-20 xl:px-28"
+        className="sticky top-0 z-40 w-full backdrop-blur-lg border-b px-6 sm:px-12 lg:px-20 xl:px-28"
         style={{
-          background: 'rgba(255,255,255,0.95)',
-          borderColor: 'rgba(0,0,0,0.08)',
+          background: 'rgba(255,255,255,0.80)',
+          borderColor: 'rgba(0,0,0,0.04)',
         }}
       >
         <div className="flex items-center justify-between py-4">
 
-          {/* Logo */}
+          {/* Logo — text-only wordmark */}
           <Link href="/" className="flex items-center group shrink-0">
-            <span className="text-3xl font-extrabold tracking-tight" style={{ color: '#0F172A', letterSpacing: '-0.03em' }}>
+            <span
+              className="text-3xl font-extrabold tracking-tight"
+              style={{ color: '#0F172A', letterSpacing: '-0.03em' }}
+            >
               edu<span style={{ color: '#475569' }}>nex</span>
             </span>
           </Link>
@@ -91,7 +89,7 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
           {/* Right side: search, theme, countries, login */}
           <div className="flex items-center gap-2.5">
 
-            {/* Search */}
+            {/* Search trigger */}
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-base font-medium transition-all hover:bg-gray-100"
@@ -129,6 +127,7 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
                   background: countriesOpen ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.04)',
                   color: countriesOpen ? '#0F172A' : '#374151',
                   border: `1px solid ${countriesOpen ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.08)'}`,
+                  minWidth: '148px',
                 }}
               >
                 <Globe className="w-5 h-5" />
@@ -138,7 +137,7 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
                 />
               </button>
 
-              {/* Two-panel Dropdown */}
+              {/* Two-panel mega dropdown */}
               {countriesOpen && (
                 <div
                   className="absolute top-full right-0 mt-2 rounded-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
@@ -150,8 +149,11 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
                   }}
                   onMouseLeave={() => setCountriesOpen(false)}
                 >
-                  {/* Top border accent */}
-                  <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg, #2563EB, #7C3AED, #2563EB)' }} />
+                  {/* Top gradient accent bar */}
+                  <div
+                    className="h-0.5 w-full"
+                    style={{ background: 'linear-gradient(90deg, #2563EB, #7C3AED, #2563EB)' }}
+                  />
 
                   <div className="flex">
                     {/* Panel 1 — Popular Destinations */}
@@ -196,7 +198,7 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
                         {europeRows.map((row, ri) => (
                           <div key={ri} className="grid grid-cols-2 gap-x-4">
                             {row.map((c) => {
-                              const isAvail = (c as any).available === true;
+                              const isAvail = c.available === true;
                               return isAvail ? (
                                 <Link
                                   key={c.slug}
@@ -211,7 +213,10 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
                                   >
                                     {c.name}
                                   </span>
-                                  <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: '#D1FAE5', color: '#065F46' }}>
+                                  <span
+                                    className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full font-bold"
+                                    style={{ background: '#D1FAE5', color: '#065F46' }}
+                                  >
                                     Live
                                   </span>
                                 </Link>

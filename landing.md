@@ -9,11 +9,13 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 - **Theme**: Clean, minimal, light-toned aesthetic inspired by modern luxury travel and adventure platforms.
 - **Color Palette**:
   - **Background**: Pure white (`#FFFFFF`) with soft neutral off-whites (`#F7F6F3`, `rgba(0,0,0,0.04)` to `rgba(0,0,0,0.06)`).
-  - **Primary Text & Headings**: Dark Charcoal / Near-Black (`#111827` / `text-slate-950`).
-  - **Secondary / Subtext**: Muted Gray (`#6B7280` / `text-slate-500`).
+  - **Primary Text & Headings**: Deep Navy-Black / Charcoal (`#0B1220` / `#0F172A`).
+  - **Secondary / Subtext**: Warm Slate-Gray (`#4B5563`).
   - **Borders & Dividers**: Delicate borders (`rgba(0,0,0,0.08)` / `border-slate-200`).
   - **Accents**: Deep charcoal solid pills, subtle brand blue accents (`#2563EB`).
-- **Typography**: Clean sans-serif font family with stark font-weight contrast (Light `300` vs. Extrabold `800`) in the Hero, transitioning to elegant Serif Display font pairings (`Georgia`) for key feature titles.
+- **Typography System (Site-Wide)**:
+  - **Headings**: Unified serif display font (**Playfair Display**) loaded globally for all `h1`, `h2`, `h3`, and `h4` tags.
+  - **Body / Subtext / Actions**: Clean, modern sans-serif font (**Inter**) loaded globally as the default body font for description copy, nav labels, dropdowns, and button text.
 - **Shape Language**: Pill-shaped CTAs (`rounded-full`), soft rounded cards (`rounded-[20px]` / `rounded-3xl`), generous whitespace, no heavy neon gradients or dark themes.
 
 ---
@@ -28,17 +30,18 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 
 ### Components & Elements
 1. **Brand Logo (Left)**:
-   - Icon: Square with rounded corners (`w-10 h-10 rounded-xl bg-gray-900`), white Compass icon.
-   - Text: `edu` in dark charcoal (`text-gray-900`), `nex` in muted gray (`text-gray-400`), font weight `font-extrabold text-2xl`.
+   - Text-only clean wordmark: `edunex` (Compass icon box has been completely removed).
+   - Font styling: `text-3xl font-extrabold tracking-tight font-sans` with custom colors (`#0F172A` for `edu`, `#475569` for `nex`) and tightened spacing (`letterSpacing: '-0.03em'`).
 2. **Search Trigger**:
-   - Light gray background pill/box (`rgba(0,0,0,0.04)`), Search icon, `Search...` text, `⌘K` keyboard badge.
+   - Styled with larger box specs: `px-5 py-3 rounded-xl text-base` (Inter).
+   - Larger search icon (`w-5 h-5`), `Search...` placeholder text, and a distinct `⌘K` keyboard shortcut badge.
 3. **Theme Toggle**:
    - Light gray icon button (`rgba(0,0,0,0.04)`), Sun/Moon icon toggle.
 4. **Countries Dropdown**:
-   - Interactive trigger button with Globe icon and Chevron arrow (`px-4 py-2.5 rounded-xl font-semibold`).
+   - Interactive trigger button with Globe icon and Chevron arrow (`px-5 py-3 rounded-xl text-base font-semibold`).
    - Opens a **two-panel mega-dropdown** (`Popular Study Destinations` on left, `More Countries (Europe)` on right) listing countries with national flags, live badges, and route links.
 5. **Login CTA Button (Right)**:
-   - **Style**: Solid dark charcoal pill (`bg-[#111827] text-white rounded-full px-5 py-2.5 font-bold text-sm`).
+   - **Style**: Solid deep navy-black pill (`bg-[#0F172A] text-white rounded-full px-6 py-3 font-bold text-base hover:scale-[1.02]`).
    - Icon: `LogIn` lucide icon.
 
 ---
@@ -55,11 +58,12 @@ This document provides a comprehensive blueprint of the current **edunex** landi
    - Text: `🌍 NEXT-GEN STUDY ABROAD INTELLIGENCE PLATFORM`
    - Style: Centered pill chip, uppercase, tracked text (`text-xs font-semibold tracking-widest bg-[rgba(0,0,0,0.06)] border-[1px solid rgba(0,0,0,0.1)] text-[#374151] rounded-full px-4 py-2`).
 2. **Dual-Weight Headline**:
-   - **Line 1 (Top)**: `"Study Abroad"` — Font weight **300 (Light)**, font size `text-5xl sm:text-6xl lg:text-7xl`, color `#111827`.
-   - **Line 2 (Bottom)**: `"Made Simple & Precise."` — Font weight **800 (Extrabold)**, font size `text-5xl sm:text-6xl lg:text-7xl`, color `#111827`.
+   - Switched to elegant Playfair Display serif typography.
+   - **Line 1 (Top)**: `"Study Abroad"` — Font weight **300 (Light)**, font size `text-5xl sm:text-6xl lg:text-7xl font-serif`, color `#0B1220`.
+   - **Line 2 (Bottom)**: `"Made Simple & Precise"` — Font weight **800 (Extrabold)**, font size `text-5xl sm:text-6xl lg:text-7xl font-serif`, color `#0B1220`.
 3. **Subtext Paragraph**:
-   - Text: `"University selection, APS verification, visa processing, blocked accounts, and living cost optimization — all in one place."`
-   - Style: Centered, `max-w-2xl text-lg sm:text-xl leading-relaxed`, color `#6B7280` (Muted gray), 2 lines max.
+   - Text: `"University selection, visa processing, blocked accounts, and living cost optimization — all in one place."` (APS verification references removed).
+   - Style: Centered, `max-w-2xl text-lg sm:text-xl leading-relaxed font-sans`, color `#4B5563` (Warmer slate-gray), 2 lines max.
 4. **Pill CTA Button Group (Side-by-Side)**:
    - **Primary Button (`Choose Destination`)**:
      - Solid dark charcoal/black (`#111827`), white text, pill shape (`rounded-full`), `px-8 py-4 font-bold text-base`.
@@ -76,7 +80,7 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 - Section ID: `#destinations`
 - Background: White (`bg-white`), padding `py-24 px-6 sm:px-12 lg:px-20 xl:px-28`.
 - Eyebrow: `GLOBAL DESTINATIONS` (`text-sm font-bold text-brand-600 uppercase tracking-wider`).
-- Title: `Select Your Study Destination` (`text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 mt-2`).
+- Title: `Select Your Study Destination` (`text-4xl sm:text-5xl font-bold tracking-tight text-slate-950 mt-2 font-serif` using Playfair Display).
 - Divider line below title (`border-b border-slate-200 pb-7`).
 
 ### Destination Cards (3-Column Grid)
@@ -86,7 +90,7 @@ This document provides a comprehensive blueprint of the current **edunex** landi
   - Top-left circular flag badge (`w-10 h-10 rounded-full bg-white/90`).
   - Top-right circular arrow button (`ArrowUpRight`).
   - Bottom dark gradient overlay (`rgba(10,30,77,0.92)`) for high-contrast card information.
-  - Card Info: Country title, key metrics (tuition range, number of universities, post-study work visa duration), discipline tags (`Engineering`, `Computer Sci`), and direct `Explore ->` action button (or `Lock Soon` badge).
+  - Card Info: Country title (`font-serif` Playfair Display), key metrics (tuition range, number of universities, post-study work visa duration), discipline tags (`Engineering`, `Computer Sci`), and direct `Explore ->` action button (or `Lock Soon` badge).
 
 ---
 
@@ -95,12 +99,14 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 - **Background**: Soft warm off-white (`#F7F6F3`) to create alternating contrast with the white destinations grid.
 - **Header**:
   - Eyebrow: `ALL-IN-ONE CAPABILITIES` (`text-xs font-semibold uppercase tracking-[0.22em] text-[#9CA3AF]`).
-  - Title: `Engineered for Academic Success` (`text-4xl sm:text-5xl font-bold text-slate-900 leading-tight`) utilizing Georgia/Serif display family.
-  - Subtext: `edunex consolidates all critical tools and data points into a single seamless SaaS environment.` (`text-base leading-relaxed text-[#6B7280]`).
+  - Title: `Engineered for Academic Success` (`text-4xl sm:text-5xl font-bold text-slate-900 leading-tight font-serif` using Playfair Display).
+  - Subtext: `edunex consolidates all critical tools and data points into a single seamless SaaS environment.` (`text-base leading-relaxed text-[#6B7280] font-sans`).
 - **Minimal Grid Cards**:
   - Style: Completely borderless and shadowless layout (plain flat containers) aligned to the center.
   - Icons: Contained inside simple circular wrappers with dark charcoal line-art styling.
+  - Card Titles: Rendered in `font-serif` Playfair Display.
   - Center Card Highlight: Rebuilt with a subtle frosted background container (`bg-[rgba(0,0,0,0.03)] border-[1px solid rgba(0,0,0,0.06)]`) to add visual anchor point.
+  - Card 2 Detail (Country Agnostic): Replaced APS-specific messaging with **"Visa & Application Guidance"** covering checklists, documents, scheduling, and blocked accounts.
 
 ---
 
@@ -108,7 +114,7 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 
 - **Footer Block 1 (Wordmark Visual Banner)**:
   - Full-bleed wide format image backdrop (`/images/graduates_hero.png`) underneath a deep dark scrim (`rgba(10,10,10,0.68)`).
-  - Centered giant white branding text: `edunex` utilizing bold display spacing (`text-clamp(4rem, 14vw, 11rem)`), followed by tracking-spaced subtext `"Your Global Education Platform"`.
+  - Centered giant white branding text: `edunex` utilizing bold display spacing (`text-clamp(4rem, 14vw, 11rem) font-serif`), followed by tracking-spaced subtext `"Your Global Education Platform"`.
 - **Footer Block 2 (Information & Navigation Grid)**:
   - Background: Near-black deep charcoal (`#0F0F0F`).
   - Multi-column setup:

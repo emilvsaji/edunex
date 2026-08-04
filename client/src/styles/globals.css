@@ -54,8 +54,11 @@
     @apply border-border;
   }
   body {
-    @apply bg-white text-zinc-900 antialiased selection:bg-brand-500/20 selection:text-brand-600;
+    @apply bg-white text-zinc-900 antialiased selection:bg-brand-500/20 selection:text-brand-600 font-sans;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif), 'Playfair Display', Georgia, serif;
   }
 }
 

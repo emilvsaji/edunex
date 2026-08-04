@@ -1,7 +1,21 @@
 import type { Metadata } from 'next';
+import { Playfair_Display, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'edunex — All-in-One Study Abroad Planning Platform',
@@ -42,8 +56,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
-      <body className="bg-white text-zinc-900 min-h-screen">
+    <html lang="en" className={`light ${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body className="bg-white text-zinc-900 min-h-screen font-sans">
         <ReactQueryProvider>
           <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
         </ReactQueryProvider>
