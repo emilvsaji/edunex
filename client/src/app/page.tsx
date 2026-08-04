@@ -147,7 +147,7 @@ export default function LandingPage() {
 
           {/* Subtext */}
           <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#4B5563' }}>
-            University selection, APS verification, visa processing, blocked accounts, and living cost optimization — all in one place.
+            University selection, visa processing, blocked accounts, and living cost optimization — all in one place.
           </p>
 
           {/* Pill CTA buttons */}
@@ -317,9 +317,9 @@ export default function LandingPage() {
             >
               <ShieldCheck className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 tracking-tight">APS &amp; Visa Step-by-Step</h3>
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Visa &amp; Application Guidance</h3>
             <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-              Detailed breakdown of APS India verification, required document checklists, fee transfers, and VFS slots.
+              Step-by-step visa checklists, required document guides, appointment scheduling tips, and blocked account setup.
             </p>
           </div>
 
