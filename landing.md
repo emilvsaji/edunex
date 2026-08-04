@@ -8,12 +8,12 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 
 - **Theme**: Clean, minimal, light-toned aesthetic inspired by modern luxury travel and adventure platforms.
 - **Color Palette**:
-  - **Background**: Pure white (`#FFFFFF`) with soft neutral off-whites (`rgba(0,0,0,0.04)` to `rgba(0,0,0,0.06)`).
+  - **Background**: Pure white (`#FFFFFF`) with soft neutral off-whites (`#F7F6F3`, `rgba(0,0,0,0.04)` to `rgba(0,0,0,0.06)`).
   - **Primary Text & Headings**: Dark Charcoal / Near-Black (`#111827` / `text-slate-950`).
   - **Secondary / Subtext**: Muted Gray (`#6B7280` / `text-slate-500`).
   - **Borders & Dividers**: Delicate borders (`rgba(0,0,0,0.08)` / `border-slate-200`).
   - **Accents**: Deep charcoal solid pills, subtle brand blue accents (`#2563EB`).
-- **Typography**: Clean sans-serif font family with stark font-weight contrast (Light `300` vs. Extrabold `800`).
+- **Typography**: Clean sans-serif font family with stark font-weight contrast (Light `300` vs. Extrabold `800`) in the Hero, transitioning to elegant Serif Display font pairings (`Georgia`) for key feature titles.
 - **Shape Language**: Pill-shaped CTAs (`rounded-full`), soft rounded cards (`rounded-[20px]` / `rounded-3xl`), generous whitespace, no heavy neon gradients or dark themes.
 
 ---
@@ -92,18 +92,31 @@ This document provides a comprehensive blueprint of the current **edunex** landi
 
 ## 5. Feature Showcase Section
 
-- Title: `Engineered for Academic Success` (`All-in-One Capabilities`).
-- 3-Column Feature Cards:
-  1. **Universities Directory**: Filter by city, public/private, degree levels, and English-taught programs.
-  2. **APS & Visa Step-by-Step**: Detailed breakdown of APS verification, document checklists, fee transfers, VFS slots.
-  3. **Cost & Forex Calculators**: Living expense sliders, EUR/INR exchange rate graphs, annual budget planning.
+- **Background**: Soft warm off-white (`#F7F6F3`) to create alternating contrast with the white destinations grid.
+- **Header**:
+  - Eyebrow: `ALL-IN-ONE CAPABILITIES` (`text-xs font-semibold uppercase tracking-[0.22em] text-[#9CA3AF]`).
+  - Title: `Engineered for Academic Success` (`text-4xl sm:text-5xl font-bold text-slate-900 leading-tight`) utilizing Georgia/Serif display family.
+  - Subtext: `edunex consolidates all critical tools and data points into a single seamless SaaS environment.` (`text-base leading-relaxed text-[#6B7280]`).
+- **Minimal Grid Cards**:
+  - Style: Completely borderless and shadowless layout (plain flat containers) aligned to the center.
+  - Icons: Contained inside simple circular wrappers with dark charcoal line-art styling.
+  - Center Card Highlight: Rebuilt with a subtle frosted background container (`bg-[rgba(0,0,0,0.03)] border-[1px solid rgba(0,0,0,0.06)]`) to add visual anchor point.
 
 ---
 
-## 6. Footer
+## 6. Footer Section
 
-- Clean white footer (`border-t border-slate-100 bg-white`).
-- Brand info (`edunex © 2026`), copyright, and navigation links (`Germany Hub`, `Admin Portal`).
+- **Footer Block 1 (Wordmark Visual Banner)**:
+  - Full-bleed wide format image backdrop (`/images/graduates_hero.png`) underneath a deep dark scrim (`rgba(10,10,10,0.68)`).
+  - Centered giant white branding text: `edunex` utilizing bold display spacing (`text-clamp(4rem, 14vw, 11rem)`), followed by tracking-spaced subtext `"Your Global Education Platform"`.
+- **Footer Block 2 (Information & Navigation Grid)**:
+  - Background: Near-black deep charcoal (`#0F0F0F`).
+  - Multi-column setup:
+    - Left side: Brand identity logo and tagline.
+    - Right side: Multi-category lists:
+      - **Platform**: Germany Hub, and coming-soon markers for UK, USA, and Canada.
+      - **Admin**: Link redirect for Admin Portal.
+  - Bottom Bar: Copyright notice (`© 2026 edunex Platform`) and student mission statement.
 
 ---
 
