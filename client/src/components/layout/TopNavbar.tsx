@@ -9,6 +9,7 @@ import {
   Sun,
   ChevronDown,
   LogIn,
+  Globe,
 } from 'lucide-react';
 import { useTheme } from '../providers/ThemeProvider';
 import GlobalSearchModal from '../search/GlobalSearchModal';
@@ -18,13 +19,36 @@ interface Props {
   activeModuleLabel?: string;
 }
 
-const COUNTRIES = [
-  { name: 'Germany', flag: '🇩🇪', slug: 'germany', available: true },
-  { name: 'United States', flag: '🇺🇸', slug: 'usa', available: false },
-  { name: 'United Kingdom', flag: '🇬🇧', slug: 'uk', available: false },
-  { name: 'Australia', flag: '🇦🇺', slug: 'australia', available: false },
-  { name: 'Canada', flag: '🇨🇦', slug: 'canada', available: false },
+// Two-panel dropdown data
+const POPULAR_DESTINATIONS = [
+  { name: 'United Kingdom', flag: '🇬🇧', slug: 'uk' },
+  { name: 'United States', flag: '🇺🇸', slug: 'usa' },
+  { name: 'Canada', flag: '🇨🇦', slug: 'canada' },
+  { name: 'Australia', flag: '🇦🇺', slug: 'australia' },
+  { name: 'New Zealand', flag: '🇳🇿', slug: 'new-zealand' },
+  { name: 'Ireland', flag: '🇮🇪', slug: 'ireland' },
+  { name: 'Dubai (UAE)', flag: '🇦🇪', slug: 'uae' },
+  { name: 'Singapore', flag: '🇸🇬', slug: 'singapore' },
+  { name: 'Malaysia', flag: '🇲🇾', slug: 'malaysia' },
 ];
+
+const EUROPE_DESTINATIONS = [
+  { name: 'Germany', flag: '🇩🇪', slug: 'germany', available: true },
+  { name: 'France', flag: '🇫🇷', slug: 'france' },
+  { name: 'Netherlands', flag: '🇳🇱', slug: 'netherlands' },
+  { name: 'Italy', flag: '🇮🇹', slug: 'italy' },
+  { name: 'Spain', flag: '🇪🇸', slug: 'spain' },
+  { name: 'Sweden', flag: '🇸🇪', slug: 'sweden' },
+  { name: 'Finland', flag: '🇫🇮', slug: 'finland' },
+  { name: 'Poland', flag: '🇵🇱', slug: 'poland' },
+];
+
+// Split array into 2-column rows
+function toRows<T>(arr: T[], cols = 2): T[][] {
+  const rows: T[][] = [];
+  for (let i = 0; i < arr.length; i += cols) rows.push(arr.slice(i, i + cols));
+  return rows;
+}
 
 export default function TopNavbar({ countryName = 'Germany', activeModuleLabel = 'Overview' }: Props) {
   const { theme, setTheme } = useTheme();
@@ -32,7 +56,6 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
   const [countriesOpen, setCountriesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -43,120 +66,192 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const popularRows = toRows(POPULAR_DESTINATIONS);
+  const europeRows = toRows(EUROPE_DESTINATIONS);
+
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 lg:px-12">
-        <div className="max-w-[1536px] mx-auto flex items-center justify-between py-3.5">
+      {/* Navbar — dark navy matching hero */}
+      <header
+        className="sticky top-0 z-40 w-full backdrop-blur-md border-b px-6 sm:px-12 lg:px-20 xl:px-28"
+        style={{
+          background: 'linear-gradient(135deg, #03091A 0%, #0A1E4D 100%)',
+          borderColor: 'rgba(255,255,255,0.08)',
+        }}
+      >
+        <div className="flex items-center justify-between py-5">
 
           {/* Logo */}
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-                <Compass className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-extrabold tracking-tight text-slate-950">
-                edu<span className="text-brand-600">nex</span>
-              </span>
-            </Link>
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-800/30 group-hover:scale-105 transition-transform">
+              <Compass className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-extrabold tracking-tight text-white">
+              edu<span className="text-blue-400">nex</span>
+            </span>
+          </Link>
 
-            {/* Nav Links */}
-            <nav className="hidden md:flex items-center gap-1">
-              {/* Countries Dropdown */}
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setCountriesOpen((prev) => !prev)}
-                  onMouseEnter={() => setCountriesOpen(true)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                    countriesOpen
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
-                >
-                  Countries
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${countriesOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
+          {/* Right side: search, theme, countries, login */}
+          <div className="flex items-center gap-2.5">
 
-                {/* Dropdown Panel */}
-                {countriesOpen && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-60 rounded-2xl bg-white border border-slate-200/80 shadow-2xl shadow-slate-200/60 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
-                    onMouseLeave={() => setCountriesOpen(false)}
-                  >
-                    <div className="p-2">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-3 pt-1 pb-2">
-                        Study Destinations
-                      </p>
-                      {COUNTRIES.map((c) =>
-                        c.available ? (
-                          <Link
-                            key={c.slug}
-                            href={`/${c.slug}`}
-                            onClick={() => setCountriesOpen(false)}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-brand-50 transition-colors group"
-                          >
-                            <span className="text-2xl leading-none">{c.flag}</span>
-                            <span className="text-sm font-semibold text-slate-800 group-hover:text-brand-700">
-                              {c.name}
-                            </span>
-                            <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">
-                              Live
-                            </span>
-                          </Link>
-                        ) : (
-                          <div
-                            key={c.slug}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl opacity-50 cursor-not-allowed"
-                          >
-                            <span className="text-2xl leading-none">{c.flag}</span>
-                            <span className="text-sm font-semibold text-slate-600">{c.name}</span>
-                            <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-bold">
-                              Soon
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </nav>
-          </div>
-
-          {/* Right Action Tools */}
-          <div className="flex items-center space-x-2">
-            {/* Global Search */}
+            {/* Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-xs font-medium text-slate-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all"
+              style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
-              <Search className="w-3.5 h-3.5 text-brand-600" />
-              <span className="hidden md:inline">Search everything...</span>
-              <span className="px-1.5 py-0.5 rounded bg-white text-[10px] font-mono text-slate-400 border border-slate-200">
+              <Search className="w-4 h-4 text-blue-400" />
+              <span className="hidden md:inline text-sm">Search...</span>
+              <span
+                className="hidden md:inline px-1.5 py-0.5 rounded text-[11px] font-mono"
+                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
+              >
                 ⌘K
               </span>
             </button>
 
-            {/* Dark/Light mode toggle */}
+            {/* Theme toggle */}
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-slate-700 transition-colors"
+              className="p-3 rounded-xl transition-all"
+              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
               title="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+              {theme === 'dark'
+                ? <Sun className="w-5 h-5 text-amber-400" />
+                : <Moon className="w-5 h-5 text-blue-300" />}
             </button>
 
-            {/* Login Button */}
-            <button className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold transition-all shadow-sm shadow-brand-500/20">
-              <LogIn className="w-3.5 h-3.5" />
+            {/* Countries Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setCountriesOpen((p) => !p)}
+                onMouseEnter={() => setCountriesOpen(true)}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl text-base font-semibold transition-all"
+                style={{
+                  background: countriesOpen ? 'rgba(37,99,235,0.25)' : 'rgba(255,255,255,0.07)',
+                  color: countriesOpen ? '#93C5FD' : 'rgba(255,255,255,0.75)',
+                  border: `1px solid ${countriesOpen ? 'rgba(96,165,250,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                }}
+              >
+                <Globe className="w-4 h-4" />
+                Countries
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${countriesOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {/* Two-panel Dropdown */}
+              {countriesOpen && (
+                <div
+                  className="absolute top-full right-0 mt-2 rounded-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid #E8EDF5',
+                    boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08)',
+                    minWidth: '700px',
+                  }}
+                  onMouseLeave={() => setCountriesOpen(false)}
+                >
+                  {/* Top border accent */}
+                  <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg, #2563EB, #7C3AED, #2563EB)' }} />
+
+                  <div className="flex">
+                    {/* Panel 1 — Popular Destinations */}
+                    <div className="flex-1 p-7">
+                      <p
+                        className="text-[13px] font-bold uppercase tracking-[0.12em] mb-5"
+                        style={{ color: '#3A4A6B' }}
+                      >
+                        Popular Study Destinations
+                      </p>
+                      <div className="space-y-1.5">
+                        {popularRows.map((row, ri) => (
+                          <div key={ri} className="grid grid-cols-2 gap-x-4">
+                            {row.map((c) => (
+                              <div
+                                key={c.slug}
+                                className="flex items-center gap-3 py-2 rounded-lg px-2 cursor-not-allowed opacity-60 select-none"
+                              >
+                                <span className="text-[22px] leading-none">{c.flag}</span>
+                                <span className="text-[16px] font-normal" style={{ color: '#1A1A2E' }}>
+                                  {c.name}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-px my-5" style={{ background: '#E5EAF2' }} />
+
+                    {/* Panel 2 — Europe */}
+                    <div className="flex-1 p-7">
+                      <p
+                        className="text-[13px] font-bold uppercase tracking-[0.12em] mb-5"
+                        style={{ color: '#3A4A6B' }}
+                      >
+                        More Countries (Europe)
+                      </p>
+                      <div className="space-y-1.5">
+                        {europeRows.map((row, ri) => (
+                          <div key={ri} className="grid grid-cols-2 gap-x-4">
+                            {row.map((c) => {
+                              const isAvail = (c as any).available === true;
+                              return isAvail ? (
+                                <Link
+                                  key={c.slug}
+                                  href={`/${c.slug}`}
+                                  onClick={() => setCountriesOpen(false)}
+                                  className="flex items-center gap-3 py-2 rounded-lg px-2 hover:bg-blue-50 transition-colors group"
+                                >
+                                  <span className="text-[22px] leading-none">{c.flag}</span>
+                                  <span
+                                    className="text-[15px] font-semibold group-hover:text-blue-700 transition-colors"
+                                    style={{ color: '#1A1A2E' }}
+                                  >
+                                    {c.name}
+                                  </span>
+                                  <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: '#D1FAE5', color: '#065F46' }}>
+                                    Live
+                                  </span>
+                                </Link>
+                              ) : (
+                                <div
+                                  key={c.slug}
+                                  className="flex items-center gap-3 py-2 rounded-lg px-2 cursor-not-allowed"
+                                  style={{ opacity: 0.5 }}
+                                >
+                                  <span className="text-[22px] leading-none">{c.flag}</span>
+                                  <span className="text-[15px] font-normal" style={{ color: '#1A1A2E' }}>
+                                    {c.name}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Login */}
+            <button
+              className="hidden sm:flex items-center gap-2 px-6 py-3 rounded-xl font-extrabold text-base text-white transition-all hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg, #2563EB, #4F46E5)', boxShadow: '0 4px 16px rgba(37,99,235,0.35)' }}
+            >
+              <LogIn className="w-5 h-5" />
               Login
             </button>
           </div>
         </div>
       </header>
 
-      {/* Global Search Dialog Modal */}
       <GlobalSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
