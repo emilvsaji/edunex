@@ -82,12 +82,9 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
         <div className="flex items-center justify-between py-4">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <Compass className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-2xl font-extrabold tracking-tight text-gray-900">
-              edu<span className="text-gray-400">nex</span>
+          <Link href="/" className="flex items-center group shrink-0">
+            <span className="text-3xl font-extrabold tracking-tight" style={{ color: '#0F172A', letterSpacing: '-0.03em' }}>
+              edu<span style={{ color: '#475569' }}>nex</span>
             </span>
           </Link>
 
@@ -97,13 +94,13 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
             {/* Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+              className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-base font-medium transition-all hover:bg-gray-100"
               style={{ background: 'rgba(0,0,0,0.04)', color: '#374151', border: '1px solid rgba(0,0,0,0.08)' }}
             >
-              <Search className="w-4 h-4 text-gray-500" />
-              <span className="hidden md:inline text-sm">Search...</span>
+              <Search className="w-5 h-5 text-gray-500" />
+              <span className="hidden md:inline text-base">Search...</span>
               <span
-                className="hidden md:inline px-1.5 py-0.5 rounded text-[11px] font-mono"
+                className="hidden md:inline px-2 py-0.5 rounded text-xs font-mono"
                 style={{ background: 'rgba(0,0,0,0.06)', color: '#6B7280', border: '1px solid rgba(0,0,0,0.08)' }}
               >
                 ⌘K
@@ -127,17 +124,17 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
               <button
                 onClick={() => setCountriesOpen((p) => !p)}
                 onMouseEnter={() => setCountriesOpen(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-gray-100"
+                className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-base font-semibold transition-all hover:bg-gray-100"
                 style={{
                   background: countriesOpen ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.04)',
-                  color: countriesOpen ? '#111827' : '#374151',
+                  color: countriesOpen ? '#0F172A' : '#374151',
                   border: `1px solid ${countriesOpen ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.08)'}`,
                 }}
               >
-                <Globe className="w-4 h-4" />
+                <Globe className="w-5 h-5" />
                 Countries
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${countriesOpen ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 transition-transform duration-200 ${countriesOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
@@ -242,10 +239,10 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
 
             {/* Login */}
             <button
-              className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm text-white transition-all hover:opacity-90 hover:scale-[1.02]"
-              style={{ background: '#111827', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}
+              className="hidden sm:flex items-center gap-2 px-6 py-3 rounded-full font-bold text-base text-white transition-all hover:opacity-90 hover:scale-[1.02]"
+              style={{ background: '#0F172A', boxShadow: '0 2px 14px rgba(0,0,0,0.20)' }}
             >
-              <LogIn className="w-4 h-4" />
+              <LogIn className="w-5 h-5" />
               Login
             </button>
           </div>

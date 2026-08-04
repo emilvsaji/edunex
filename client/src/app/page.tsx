@@ -133,20 +133,20 @@ export default function LandingPage() {
           <h1 className="leading-tight">
             <span
               className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
-              style={{ fontWeight: 300, color: '#111827' }}
+              style={{ fontWeight: 300, color: '#0B1220' }}
             >
               Study Abroad
             </span>
             <span
               className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
-              style={{ fontWeight: 800, color: '#111827' }}
+              style={{ fontWeight: 800, color: '#0B1220' }}
             >
               Made Simple &amp; Precise.
             </span>
           </h1>
 
           {/* Subtext */}
-          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#6B7280' }}>
+          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#4B5563' }}>
             University selection, APS verification, visa processing, blocked accounts, and living cost optimization — all in one place.
           </p>
 
