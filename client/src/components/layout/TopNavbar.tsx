@@ -75,19 +75,19 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
       <header
         className="sticky top-0 z-40 w-full backdrop-blur-md border-b px-6 sm:px-12 lg:px-20 xl:px-28"
         style={{
-          background: 'linear-gradient(135deg, #03091A 0%, #0A1E4D 100%)',
-          borderColor: 'rgba(255,255,255,0.08)',
+          background: 'rgba(255,255,255,0.95)',
+          borderColor: 'rgba(0,0,0,0.08)',
         }}
       >
-        <div className="flex items-center justify-between py-5">
+        <div className="flex items-center justify-between py-4">
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-800/30 group-hover:scale-105 transition-transform">
-              <Compass className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+              <Compass className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-white">
-              edu<span className="text-blue-400">nex</span>
+            <span className="text-2xl font-extrabold tracking-tight text-gray-900">
+              edu<span className="text-gray-400">nex</span>
             </span>
           </Link>
 
@@ -97,14 +97,14 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
             {/* Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all"
-              style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+              style={{ background: 'rgba(0,0,0,0.04)', color: '#374151', border: '1px solid rgba(0,0,0,0.08)' }}
             >
-              <Search className="w-4 h-4 text-blue-400" />
+              <Search className="w-4 h-4 text-gray-500" />
               <span className="hidden md:inline text-sm">Search...</span>
               <span
                 className="hidden md:inline px-1.5 py-0.5 rounded text-[11px] font-mono"
-                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
+                style={{ background: 'rgba(0,0,0,0.06)', color: '#6B7280', border: '1px solid rgba(0,0,0,0.08)' }}
               >
                 ⌘K
               </span>
@@ -113,13 +113,13 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
             {/* Theme toggle */}
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-3 rounded-xl transition-all"
-              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="p-2.5 rounded-xl transition-all hover:bg-gray-100"
+              style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}
               title="Toggle Theme"
             >
               {theme === 'dark'
-                ? <Sun className="w-5 h-5 text-amber-400" />
-                : <Moon className="w-5 h-5 text-blue-300" />}
+                ? <Sun className="w-4 h-4 text-amber-500" />
+                : <Moon className="w-4 h-4 text-gray-500" />}
             </button>
 
             {/* Countries Dropdown */}
@@ -127,11 +127,11 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
               <button
                 onClick={() => setCountriesOpen((p) => !p)}
                 onMouseEnter={() => setCountriesOpen(true)}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl text-base font-semibold transition-all"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-gray-100"
                 style={{
-                  background: countriesOpen ? 'rgba(37,99,235,0.25)' : 'rgba(255,255,255,0.07)',
-                  color: countriesOpen ? '#93C5FD' : 'rgba(255,255,255,0.75)',
-                  border: `1px solid ${countriesOpen ? 'rgba(96,165,250,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                  background: countriesOpen ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.04)',
+                  color: countriesOpen ? '#111827' : '#374151',
+                  border: `1px solid ${countriesOpen ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.08)'}`,
                 }}
               >
                 <Globe className="w-4 h-4" />
@@ -242,10 +242,10 @@ export default function TopNavbar({ countryName = 'Germany', activeModuleLabel =
 
             {/* Login */}
             <button
-              className="hidden sm:flex items-center gap-2 px-6 py-3 rounded-xl font-extrabold text-base text-white transition-all hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg, #2563EB, #4F46E5)', boxShadow: '0 4px 16px rgba(37,99,235,0.35)' }}
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm text-white transition-all hover:opacity-90 hover:scale-[1.02]"
+              style={{ background: '#111827', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}
             >
-              <LogIn className="w-5 h-5" />
+              <LogIn className="w-4 h-4" />
               Login
             </button>
           </div>

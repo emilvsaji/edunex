@@ -5,10 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   ArrowRight,
-  Sparkles,
   GraduationCap,
   ShieldCheck,
-  CheckCircle2,
   Lock,
   Calculator,
   ArrowUpRight,
@@ -107,115 +105,85 @@ export default function LandingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-500/20 selection:text-blue-300">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
       <TopNavbar countryName="All Destinations" activeModuleLabel="Home" />
 
       {/* ─── Hero Section ─── */}
-      <section
-        className="relative overflow-hidden w-full"
-        style={{ background: 'linear-gradient(135deg, #03091A 0%, #0A1E4D 45%, #0D2E6E 75%, #1040A0 100%)' }}
-      >
-        {/* Orbs */}
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-25 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(circle, #3B6EE8 0%, transparent 70%)' }} />
-        <div className="absolute -bottom-32 right-0 w-[500px] h-[500px] rounded-full opacity-20 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(circle, #6C3DE8 0%, transparent 70%)' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse, #2563EB 0%, transparent 60%)' }} />
-        {/* Grid overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent" />
+      <section className="relative overflow-hidden w-full min-h-[88vh] flex items-center justify-center">
+        {/* Full-bleed background image */}
+        <Image
+          src="/images/hero_campus.png"
+          alt="European university campus"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        {/* White scrim overlay ~65% */}
+        <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.65)' }} />
 
-        <div className="relative z-10 pt-16 pb-28 px-6 sm:px-12 lg:px-20 xl:px-28 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
+        {/* Hero content — centered */}
+        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-12 py-24 max-w-4xl mx-auto gap-7">
 
-            {/* Left */}
-            <div className="lg:col-span-6 space-y-9 text-left">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-blue-400/30 bg-white/5 backdrop-blur-sm text-sm font-semibold text-blue-200 shadow-sm">
-                <Sparkles className="w-4 h-4 text-blue-300" />
-                Next-Gen Study Abroad Intelligence Platform
-              </div>
+          {/* Eyebrow badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-widest uppercase" style={{ background: 'rgba(0,0,0,0.06)', color: '#374151', border: '1px solid rgba(0,0,0,0.1)' }}>
+            🌍 Next-Gen Study Abroad Intelligence Platform
+          </div>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-white leading-[1.05]">
-                Study Abroad
-                <br />
-                <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #60A5FA, #818CF8, #34D399)' }}>
-                  made Simple &amp; Precise.
-                </span>
-              </h1>
+          {/* Dual-weight headline */}
+          <h1 className="leading-tight">
+            <span
+              className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
+              style={{ fontWeight: 300, color: '#111827' }}
+            >
+              Study Abroad
+            </span>
+            <span
+              className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
+              style={{ fontWeight: 800, color: '#111827' }}
+            >
+              Made Simple &amp; Precise.
+            </span>
+          </h1>
 
-              <p className="text-lg sm:text-xl text-blue-100/75 max-w-xl leading-relaxed">
-                The complete intelligence platform for international students — from university selection and APS verification to visa processing, blocked accounts, and living cost optimization.
-              </p>
+          {/* Subtext */}
+          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#6B7280' }}>
+            University selection, APS verification, visa processing, blocked accounts, and living cost optimization — all in one place.
+          </p>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-1">
-                <button
-                  onClick={scrollToGrid}
-                  className="group px-9 py-4 rounded-2xl font-extrabold text-base transition-all hover:scale-[1.03] flex items-center justify-center gap-2 shadow-[0_8px_32px_rgba(37,99,235,0.45)]"
-                  style={{ background: 'linear-gradient(135deg, #2563EB, #4F46E5)' }}
-                >
-                  <span className="text-white">Choose Destination</span>
-                  <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4 pt-1">
-                {[
-                  { label: '100% Verified Data', color: 'text-emerald-300' },
-                  { label: '€0 Tuition Public Universities', color: 'text-blue-300' },
-                  { label: 'APS India Prerequisite Guide', color: 'text-violet-300' },
-                ].map(({ label, color }) => (
-                  <span key={label} className={`flex items-center gap-1.5 text-sm font-semibold ${color}`}>
-                    <CheckCircle2 className="w-4 h-4" />
-                    {label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — Hero Image */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)] aspect-[4/3] group ring-1 ring-white/10">
-                <Image
-                  src="/images/graduates_hero.png"
-                  alt="International graduates celebrating abroad"
-                  fill
-                  className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#03091A]/80 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold border border-white/15 uppercase tracking-widest mb-3">
-                    🌍 Study Anywhere
-                  </span>
-                  <h3 className="text-2xl font-extrabold leading-snug">
-                    Your Global Education <br />
-                    <span style={{ color: '#93C5FD' }}>Journey Starts Here</span>
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {['Germany', 'UK', 'USA', 'Canada', 'Australia'].map((dest) => (
-                      <span key={dest} className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-sm font-semibold border border-white/15">
-                        {dest}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          {/* Pill CTA buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+            <button
+              onClick={scrollToGrid}
+              id="hero-cta-destination"
+              className="group flex items-center gap-2.5 px-8 py-4 rounded-full font-bold text-base text-white transition-all hover:scale-[1.03] hover:shadow-xl"
+              style={{ background: '#111827', boxShadow: '0 4px 24px rgba(0,0,0,0.20)' }}
+            >
+              Choose Destination
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+            <button
+              onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
+              id="hero-cta-explore"
+              className="flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base transition-all hover:scale-[1.02]"
+              style={{
+                background: 'transparent',
+                color: '#111827',
+                border: '2px solid rgba(0,0,0,0.75)',
+              }}
+            >
+              Explore Countries
+            </button>
           </div>
         </div>
       </section>
 
       {/* ─── Destinations Grid ─── */}
       <section id="destinations" className="py-24 px-6 sm:px-12 lg:px-20 xl:px-28 w-full space-y-12 bg-white">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-7">
-          <div>
-            <span className="text-sm font-bold text-brand-600 uppercase tracking-wider">Global Destinations</span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 mt-2">
-              Select Your Study Destination
-            </h2>
-          </div>
-          <p className="text-base text-slate-500 max-w-md">
-            Click a destination to launch its full dashboard. Germany is fully live with 16 modules.
-          </p>
+        <div className="border-b border-slate-200 pb-7">
+          <span className="text-sm font-bold text-brand-600 uppercase tracking-wider">Global Destinations</span>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 mt-2">
+            Select Your Study Destination
+          </h2>
         </div>
 
         {/* 3-column photo card grid — reference-style */}
@@ -302,60 +270,141 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Feature Showcase ─── */}
-      <section className="py-24 bg-white border-t border-slate-100 px-6 sm:px-12 lg:px-20 xl:px-28 w-full space-y-14">
-        <div className="text-center space-y-4 max-w-2xl mx-auto">
-          <span className="text-sm font-bold text-brand-600 uppercase tracking-wider">All-in-One Capabilities</span>
-          <h2 className="text-4xl font-extrabold text-slate-950">Engineered for Academic Success</h2>
-          <p className="text-base text-slate-500">
+      <section className="py-28 border-t border-slate-100 px-6 sm:px-12 lg:px-20 xl:px-28 w-full" style={{ background: '#F7F6F3' }}>
+        {/* Section Header */}
+        <div className="text-center space-y-5 max-w-2xl mx-auto mb-20">
+          <span
+            className="text-xs font-semibold uppercase tracking-[0.22em]"
+            style={{ color: '#9CA3AF' }}
+          >
+            All-in-One Capabilities
+          </span>
+          <h2
+            className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight"
+            style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+          >
+            Engineered for Academic Success
+          </h2>
+          <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: '#6B7280' }}>
             edunex consolidates all critical tools and data points into a single seamless SaaS environment.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          <div className="p-9 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-4 hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center">
-              <GraduationCap className="w-7 h-7" />
+        {/* Minimal Borderless Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+          {/* Card 1 */}
+          <div className="flex flex-col items-center text-center px-8 py-10 space-y-4 group">
+            <div
+              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+              style={{ background: 'rgba(0,0,0,0.05)' }}
+            >
+              <GraduationCap className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Universities Directory</h3>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Universities Directory</h3>
+            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
               Filter by city, public/private status, degree levels, and English-taught programs with real-time sorting.
             </p>
           </div>
 
-          <div className="p-9 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-4 hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <ShieldCheck className="w-7 h-7" />
+          {/* Card 2 */}
+          <div
+            className="flex flex-col items-center text-center px-8 py-10 space-y-4 group rounded-2xl"
+            style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)' }}
+          >
+            <div
+              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+              style={{ background: 'rgba(0,0,0,0.05)' }}
+            >
+              <ShieldCheck className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">APS &amp; Visa Step-by-Step</h3>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">APS &amp; Visa Step-by-Step</h3>
+            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
               Detailed breakdown of APS India verification, required document checklists, fee transfers, and VFS slots.
             </p>
           </div>
 
-          <div className="p-9 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-4 hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <Calculator className="w-7 h-7" />
+          {/* Card 3 */}
+          <div className="flex flex-col items-center text-center px-8 py-10 space-y-4 group">
+            <div
+              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+              style={{ background: 'rgba(0,0,0,0.05)' }}
+            >
+              <Calculator className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Cost &amp; Forex Calculators</h3>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Cost &amp; Forex Calculators</h3>
+            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
               Itemized city living expense sliders, EUR → INR exchange rate historical graphs, and annual budget planning.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
-      <footer className="mt-auto py-14 border-t border-slate-100 bg-white text-sm text-slate-500 px-6 sm:px-12 lg:px-20 xl:px-28 w-full">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">e</div>
-            <span className="font-extrabold text-base text-slate-900">edunex</span>
-            <span>© 2026 edunex Platform. All rights reserved.</span>
+      {/* ─── Footer: Part 1 — Full-bleed wordmark image ─── */}
+      <div className="relative w-full overflow-hidden" style={{ minHeight: '340px' }}>
+        <Image
+          src="/images/graduates_hero.png"
+          alt="edunex — study abroad platform"
+          fill
+          className="object-cover object-center"
+        />
+        {/* Dark scrim */}
+        <div className="absolute inset-0" style={{ background: 'rgba(10,10,10,0.68)' }} />
+        {/* Centered wordmark */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full py-16 px-6 text-center">
+          <span
+            className="font-extrabold tracking-tight text-white leading-none select-none"
+            style={{ fontSize: 'clamp(4rem, 14vw, 11rem)', letterSpacing: '-0.03em' }}
+          >
+            edunex
+          </span>
+          <p className="mt-4 text-sm font-medium tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            Your Global Education Platform
+          </p>
+        </div>
+      </div>
+
+      {/* ─── Footer: Part 2 — Dark multi-column link footer ─── */}
+      <footer style={{ background: '#0F0F0F' }} className="text-sm px-6 sm:px-12 lg:px-20 xl:px-28 w-full py-12">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-10 border-b pb-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+
+          {/* Brand column */}
+          <div className="space-y-3 max-w-xs">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+                <span className="font-extrabold text-sm text-gray-900">e</span>
+              </div>
+              <span className="font-extrabold text-base text-white">edu<span style={{ color: '#6B7280' }}>nex</span></span>
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
+              The complete intelligence platform for international students navigating study abroad.
+            </p>
           </div>
-          <div className="flex space-x-6 font-semibold text-sm">
-            <Link href="/germany" className="hover:text-brand-600 transition-colors">Germany Hub</Link>
-            <Link href="/admin" className="hover:text-brand-600 transition-colors">Admin Portal</Link>
+
+          {/* Links columns */}
+          <div className="flex flex-wrap gap-12">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Platform</p>
+              <div className="space-y-2">
+                <Link href="/germany" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Germany Hub</Link>
+                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>UK Hub <span className="text-xs">(soon)</span></span>
+                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>USA Hub <span className="text-xs">(soon)</span></span>
+                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>Canada Hub <span className="text-xs">(soon)</span></span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Admin</p>
+              <div className="space-y-2">
+                <Link href="/admin" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Admin Portal</Link>
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs" style={{ color: '#4B5563' }}>© 2026 edunex Platform. All rights reserved.</p>
+          <p className="text-xs" style={{ color: '#374151' }}>Built for international students, by people who've been there.</p>
         </div>
       </footer>
     </div>
