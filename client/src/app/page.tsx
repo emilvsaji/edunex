@@ -109,7 +109,7 @@ export default function LandingPage() {
       <TopNavbar countryName="All Destinations" activeModuleLabel="Home" />
 
       {/* ─── Hero Section ─── */}
-      <section className="relative overflow-hidden w-full min-h-[88vh] flex items-center justify-center">
+      <section className="relative overflow-hidden w-full min-h-[82vh] flex items-center justify-center">
         {/* Full-bleed background image */}
         <Image
           src="/images/hero_campus.png"
@@ -122,18 +122,18 @@ export default function LandingPage() {
         <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.65)' }} />
 
         {/* Hero content — centered */}
-        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-12 py-28 max-w-6xl mx-auto gap-8">
+        <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 py-16 sm:py-24 max-w-5xl mx-auto gap-6 sm:gap-8">
 
           {/* Dual-weight headline */}
-          <h1 className="leading-[1.05] font-serif w-full">
+          <h1 className="leading-[1.1] font-serif w-full">
             <span
-              className="block text-6xl sm:text-7xl lg:text-8xl tracking-tight font-serif"
+              className="block text-4xl sm:text-6xl lg:text-7xl tracking-tight font-serif"
               style={{ fontWeight: 300, color: '#0B1220' }}
             >
               Study Abroad
             </span>
             <span
-              className="block text-6xl sm:text-7xl lg:text-8xl tracking-tight font-serif"
+              className="block text-4xl sm:text-6xl lg:text-7xl tracking-tight font-serif"
               style={{ fontWeight: 800, color: '#0B1220' }}
             >
               Made Simple &amp; Precise
@@ -141,7 +141,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Subtext */}
-          <p className="text-lg sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#1F2937' }}>
+          <p className="text-base sm:text-xl max-w-2xl leading-relaxed" style={{ color: '#1F2937' }}>
             University selection, visa processing, blocked accounts, and living cost optimization — all in one place.
           </p>
 
@@ -150,7 +150,7 @@ export default function LandingPage() {
             <button
               onClick={scrollToGrid}
               id="hero-cta-destination"
-              className="group flex items-center gap-2.5 px-8 py-4 rounded-full font-bold text-base text-white transition-all hover:scale-[1.03] hover:shadow-xl"
+              className="group flex items-center gap-2.5 px-7 py-3.5 rounded-full font-bold text-sm sm:text-base text-white transition-all hover:scale-[1.03] hover:shadow-xl"
               style={{ background: '#111827', boxShadow: '0 4px 24px rgba(0,0,0,0.20)' }}
             >
               Choose Destination
@@ -159,7 +159,7 @@ export default function LandingPage() {
             <button
               onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
               id="hero-cta-explore"
-              className="flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base transition-all hover:scale-[1.02]"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm sm:text-base transition-all hover:scale-[1.02]"
               style={{
                 background: 'transparent',
                 color: '#111827',
@@ -173,15 +173,15 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Destinations Grid ─── */}
-      <section id="destinations" className="py-24 px-6 sm:px-12 lg:px-20 xl:px-28 w-full space-y-12 bg-white">
-        <div className="border-b border-slate-200 pb-7">
-          <span className="text-sm font-bold text-brand-600 uppercase tracking-wider">Global Destinations</span>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 mt-2">
+      <section id="destinations" className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-10 bg-white">
+        <div className="border-b border-slate-200 pb-6">
+          <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Global Destinations</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950 mt-1">
             Select Your Study Destination
           </h2>
         </div>
 
-        {/* 3-column photo card grid — reference-style */}
+        {/* 3-column photo card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {cards.map((card) => (
             <div
@@ -265,76 +265,76 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Feature Showcase ─── */}
-      <section className="py-28 border-t border-slate-100 px-6 sm:px-12 lg:px-20 xl:px-28 w-full" style={{ background: '#F7F6F3' }}>
-        {/* Section Header */}
-        <div className="text-center space-y-5 max-w-2xl mx-auto mb-20">
-          <span
-            className="text-xs font-semibold uppercase tracking-[0.22em]"
-            style={{ color: '#9CA3AF' }}
-          >
-            All-in-One Capabilities
-          </span>
-          <h2
-            className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight"
-          >
-            Engineered for Academic Success
-          </h2>
-          <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: '#6B7280' }}>
-            edunex consolidates all critical tools and data points into a single seamless SaaS environment.
-          </p>
-        </div>
-
-        {/* Minimal Borderless Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-          {/* Card 1 */}
-          <div className="flex flex-col items-center text-center px-8 py-10 space-y-4 group">
-            <div
-              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
-              style={{ background: 'rgba(0,0,0,0.05)' }}
+      <section className="py-16 sm:py-24 border-t border-slate-100 w-full" style={{ background: '#F7F6F3' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center space-y-4 max-w-2xl mx-auto mb-16">
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.22em]"
+              style={{ color: '#9CA3AF' }}
             >
-              <GraduationCap className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
-            </div>
-            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Universities Directory</h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-              Filter by city, public/private status, degree levels, and English-taught programs with real-time sorting.
+              All-in-One Capabilities
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+              Engineered for Academic Success
+            </h2>
+            <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: '#6B7280' }}>
+              edunex consolidates all critical tools and data points into a single seamless SaaS environment.
             </p>
           </div>
 
-          {/* Card 2 */}
-          <div
-            className="flex flex-col items-center text-center px-8 py-10 space-y-4 group rounded-2xl"
-            style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)' }}
-          >
-            <div
-              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
-              style={{ background: 'rgba(0,0,0,0.05)' }}
-            >
-              <ShieldCheck className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+          {/* Minimal Borderless Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Card 1 */}
+            <div className="flex flex-col items-center text-center px-6 py-8 space-y-4 group">
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+                style={{ background: 'rgba(0,0,0,0.05)' }}
+              >
+                <GraduationCap className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Universities Directory</h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
+                Filter by city, public/private status, degree levels, and English-taught programs with real-time sorting.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Visa &amp; Application Guidance</h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-              Step-by-step visa checklists, required document guides, appointment scheduling tips, and blocked account setup.
-            </p>
-          </div>
 
-          {/* Card 3 */}
-          <div className="flex flex-col items-center text-center px-8 py-10 space-y-4 group">
+            {/* Card 2 */}
             <div
-              className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
-              style={{ background: 'rgba(0,0,0,0.05)' }}
+              className="flex flex-col items-center text-center px-6 py-8 space-y-4 group rounded-2xl"
+              style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)' }}
             >
-              <Calculator className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+                style={{ background: 'rgba(0,0,0,0.05)' }}
+              >
+                <ShieldCheck className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Visa &amp; Application Guidance</h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
+                Step-by-step visa checklists, required document guides, appointment scheduling tips, and blocked account setup.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Cost &amp; Forex Calculators</h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-              Itemized city living expense sliders, EUR → INR exchange rate historical graphs, and annual budget planning.
-            </p>
+
+            {/* Card 3 */}
+            <div className="flex flex-col items-center text-center px-6 py-8 space-y-4 group">
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-full mb-2 transition-colors group-hover:bg-slate-100"
+                style={{ background: 'rgba(0,0,0,0.05)' }}
+              >
+                <Calculator className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Cost &amp; Forex Calculators</h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
+                Itemized city living expense sliders, EUR → INR exchange rate historical graphs, and annual budget planning.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ─── Footer: Part 1 — Full-bleed wordmark image ─── */}
-      <div className="relative w-full overflow-hidden" style={{ minHeight: '340px' }}>
+      <div className="relative w-full overflow-hidden" style={{ minHeight: '280px' }}>
         <Image
           src="/images/graduates_hero.png"
           alt="edunex — study abroad platform"
@@ -347,58 +347,60 @@ export default function LandingPage() {
         <div className="relative z-10 flex flex-col items-center justify-center h-full py-16 px-6 text-center">
           <span
             className="font-extrabold tracking-tight text-white leading-none select-none"
-            style={{ fontSize: 'clamp(4rem, 14vw, 11rem)', letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 9rem)', letterSpacing: '-0.03em' }}
           >
             edunex
           </span>
-          <p className="mt-4 text-sm font-medium tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="mt-4 text-xs sm:text-sm font-medium tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.45)' }}>
             Your Global Education Platform
           </p>
         </div>
       </div>
 
       {/* ─── Footer: Part 2 — Dark multi-column link footer ─── */}
-      <footer style={{ background: '#0F0F0F' }} className="text-sm px-6 sm:px-12 lg:px-20 xl:px-28 w-full py-12">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-10 border-b pb-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+      <footer style={{ background: '#0F0F0F' }} className="text-sm w-full py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-10 border-b pb-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
 
-          {/* Brand column */}
-          <div className="space-y-3 max-w-xs">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-                <span className="font-extrabold text-sm text-gray-900">e</span>
+            {/* Brand column */}
+            <div className="space-y-3 max-w-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+                  <span className="font-extrabold text-sm text-gray-900">e</span>
+                </div>
+                <span className="font-extrabold text-base text-white">edu<span style={{ color: '#6B7280' }}>nex</span></span>
               </div>
-              <span className="font-extrabold text-base text-white">edu<span style={{ color: '#6B7280' }}>nex</span></span>
+              <p className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
+                The complete intelligence platform for international students navigating study abroad.
+              </p>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
-              The complete intelligence platform for international students navigating study abroad.
-            </p>
+
+            {/* Links columns */}
+            <div className="flex flex-wrap gap-12">
+              <div className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Platform</p>
+                <div className="space-y-2">
+                  <Link href="/germany" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Germany Hub</Link>
+                  <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>UK Hub <span className="text-xs">(soon)</span></span>
+                  <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>USA Hub <span className="text-xs">(soon)</span></span>
+                  <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>Canada Hub <span className="text-xs">(soon)</span></span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Admin</p>
+                <div className="space-y-2">
+                  <Link href="/admin" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Admin Portal</Link>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Links columns */}
-          <div className="flex flex-wrap gap-12">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Platform</p>
-              <div className="space-y-2">
-                <Link href="/germany" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Germany Hub</Link>
-                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>UK Hub <span className="text-xs">(soon)</span></span>
-                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>USA Hub <span className="text-xs">(soon)</span></span>
-                <span className="block text-sm cursor-not-allowed" style={{ color: '#374151' }}>Canada Hub <span className="text-xs">(soon)</span></span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>Admin</p>
-              <div className="space-y-2">
-                <Link href="/admin" className="block text-sm transition-colors hover:text-white" style={{ color: '#6B7280' }}>Admin Portal</Link>
-              </div>
-            </div>
+          {/* Bottom bar */}
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs" style={{ color: '#4B5563' }}>© 2026 edunex Platform. All rights reserved.</p>
+            <p className="text-xs" style={{ color: '#374151' }}>Built for international students, by people who've been there.</p>
           </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs" style={{ color: '#4B5563' }}>© 2026 edunex Platform. All rights reserved.</p>
-          <p className="text-xs" style={{ color: '#374151' }}>Built for international students, by people who've been there.</p>
         </div>
       </footer>
     </div>

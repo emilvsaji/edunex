@@ -53,21 +53,26 @@ export default function LoginPage() {
         }}
       >
         {/* ── Left: Form Panel ──────────────────────────────────────────── */}
-        <div className="flex-1 bg-white flex flex-col justify-center px-10 py-12 min-w-0" style={{ maxWidth: '520px' }}>
+        <div className="flex-1 bg-white flex flex-col justify-center px-6 py-8 sm:px-10 sm:py-12 min-w-0 w-full md:max-w-[520px]">
           {/* Wordmark */}
-          <Link href="/" className="inline-flex items-center mb-10 group w-fit">
-            <span
-              className="font-extrabold tracking-tight font-sans text-2xl"
-              style={{ letterSpacing: '-0.03em', color: '#0F172A' }}
-            >
-              edu
-            </span>
-            <span
-              className="font-extrabold tracking-tight font-sans text-2xl"
-              style={{ letterSpacing: '-0.03em', color: '#475569' }}
-            >
-              nex
-            </span>
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-10 group w-fit">
+            <div className="w-8 h-8 rounded-xl overflow-hidden relative border border-slate-200/80 shadow-sm flex items-center justify-center bg-white shrink-0">
+              <Image src="/images/edunex_logo.png" alt="edunex logo" width={32} height={32} className="object-cover" />
+            </div>
+            <div className="flex items-center">
+              <span
+                className="font-extrabold tracking-tight font-sans text-2xl"
+                style={{ letterSpacing: '-0.03em', color: '#0F172A' }}
+              >
+                edu
+              </span>
+              <span
+                className="font-extrabold tracking-tight font-sans text-2xl"
+                style={{ letterSpacing: '-0.03em', color: '#475569' }}
+              >
+                nex
+              </span>
+            </div>
           </Link>
 
           {/* Heading */}

@@ -66,7 +66,7 @@ export default function OverviewModule({ country }: { country: Country }) {
           }}
         />
 
-        <div className="relative z-10 px-8 py-10 sm:px-10 sm:py-12">
+        <div className="relative z-10 px-5 py-6 sm:px-10 sm:py-12">
           {/* Eyebrow badge — edunex uppercase tracked style */}
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 text-xs font-semibold uppercase tracking-widest"
