@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { countryService } from '@/services/api';
 import { Country } from '@/types';
@@ -23,7 +23,7 @@ import CurrencyModule from '@/components/modules/CurrencyModule';
 import OfficialResourcesModule from '@/components/modules/OfficialResourcesModule';
 import FAQModule from '@/components/modules/FAQModule';
 
-export default function DestinationDashboardPage() {
+function DestinationDashboardContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -56,7 +56,7 @@ export default function DestinationDashboardPage() {
   if (isLoading || !country) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-4 text-slate-900">
-        <div className="w-10 h-10 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
         <p className="text-sm text-slate-500 font-medium">Loading {countrySlug} edunex Hub...</p>
       </div>
     );
@@ -140,5 +140,20 @@ export default function DestinationDashboardPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function DestinationDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-4 text-slate-900">
+          <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-500 font-medium">Loading edunex Hub...</p>
+        </div>
+      }
+    >
+      <DestinationDashboardContent />
+    </Suspense>
   );
 }

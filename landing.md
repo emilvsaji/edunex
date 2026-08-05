@@ -1,135 +1,124 @@
-# edunex Landing Page — Design & Technical Documentation (`landing.md`)
+# edunex Platform — Design & Architecture Blueprint (`landing.md`)
 
-This document provides a comprehensive blueprint of the current **edunex** landing page design system, visual theme, layout hierarchy, component specs, and asset guidelines. It is tailored for AI code tools, developers, and designers to accurately understand, replicate, or extend the page.
+This document provides an exhaustive specification of the **edunex** web application design system, page architecture, color tokens, typography rules, route structures, component specifications, and Vercel hosting requirements. It serves as the single source of truth for designers, developers, and AI coding agents working on the platform.
 
 ---
 
-## 1. Overview & Visual Aesthetic
+## 1. Brand Identity & Visual Aesthetic
 
-- **Theme**: Clean, minimal, light-toned aesthetic inspired by modern luxury travel and adventure platforms.
-- **Color Palette**:
-  - **Background**: Pure white (`#FFFFFF`) with soft neutral off-whites (`#F7F6F3`, `rgba(0,0,0,0.04)` to `rgba(0,0,0,0.06)`).
+- **Theme**: Clean, high-end, light-toned aesthetic inspired by modern luxury travel and premium global intelligence platforms.
+- **Color Tokens**:
+  - **Page Background**: Soft warm off-white (`#F4F4F5` / `#F7F6F3`) for subtle contrast; pure white (`#FFFFFF`) inside cards and main section containers.
   - **Primary Text & Headings**: Deep Navy-Black / Charcoal (`#0B1220` / `#0F172A`).
-  - **Secondary / Subtext**: Warm Slate-Gray (`#4B5563`).
-  - **Borders & Dividers**: Delicate borders (`rgba(0,0,0,0.08)` / `border-slate-200`).
-  - **Accents**: Deep charcoal solid pills, subtle brand blue accents (`#2563EB`).
-- **Typography System (Site-Wide)**:
-  - **Headings**: Unified serif display font (**Playfair Display**) loaded globally for all `h1`, `h2`, `h3`, and `h4` tags.
-  - **Body / Subtext / Actions**: Clean, modern sans-serif font (**Inter**) loaded globally as the default body font for description copy, nav labels, dropdowns, and button text.
-- **Shape Language**: Pill-shaped CTAs (`rounded-full`), soft rounded cards (`rounded-[20px]` / `rounded-3xl`), generous whitespace, no heavy neon gradients or dark themes.
+  - **Secondary Text / Subtext**: Warm Slate-Gray (`#4B5563` / `#6B7280`).
+  - **Dividers & Borders**: Delicate borders (`rgba(0,0,0,0.08)` / `#E2E8F0` / `border-slate-200`).
+  - **Brand Accent**: Subtle Brand Blue (`#2563EB`) for focus states, interactive text links, and highlight badges; Deep Charcoal (`#0F172A`) for primary pill CTA buttons.
+- **Typography System (Global)**:
+  - **Display / Headings**: Unified serif font (**Playfair Display**) applied to major titles (`h1`, `h2`, `h3`, `h4`, destination section titles, banner headers, auth titles).
+  - **Body / Interface / Actions**: Modern sans-serif font (**Inter**) applied globally for body text, navigation elements, form labels, inputs, dropdown menus, and pill button labels.
+- **Shape & Elevation Language**:
+  - **Pill Shape (`rounded-full`)**: Used for primary action buttons (`Choose Destination`, `Login`, `Sign up`, navbar CTAs).
+  - **Card Containers (`rounded-2xl` / `rounded-3xl` / `rounded-[24px]`)**: Used for split-panel auth cards, destination cards, and hub metric widgets.
+  - **Shadows**: Soft multi-layered ambient shadows (`0 4px 6px -1px rgba(0,0,0,0.07), 0 24px 64px -12px rgba(0,0,0,0.14)`).
 
 ---
 
-## 2. Top Navigation Bar (`TopNavbar.tsx`)
+## 2. Global Navigation Bar (`TopNavbar.tsx`)
 
-### Visual Specs
-- **Position**: Sticky top (`sticky top-0 z-40 w-full`), backdrop blur (`backdrop-blur-md`).
-- **Background**: Translucent White (`rgba(255, 255, 255, 0.95)`).
-- **Border**: Subtle bottom border (`1px solid rgba(0,0,0,0.08)`).
-- **Height / Padding**: `py-4`, horizontal padding `px-6 sm:px-12 lg:px-20 xl:px-28`.
-
-### Components & Elements
-1. **Brand Logo (Left)**:
-   - Text-only clean wordmark: `edunex` (Compass icon box has been completely removed).
-   - Font styling: `text-3xl font-extrabold tracking-tight font-sans` with custom colors (`#0F172A` for `edu`, `#475569` for `nex`) and tightened spacing (`letterSpacing: '-0.03em'`).
-2. **Search Trigger**:
-   - Styled with larger box specs: `px-5 py-3 rounded-xl text-base` (Inter).
-   - Larger search icon (`w-5 h-5`), `Search...` placeholder text, and a distinct `⌘K` keyboard shortcut badge.
-3. **Theme Toggle**:
-   - Light gray icon button (`rgba(0,0,0,0.04)`), Sun/Moon icon toggle.
-4. **Countries Dropdown**:
-   - Interactive trigger button with Globe icon and Chevron arrow (`px-5 py-3 rounded-xl text-base font-semibold`).
-   - Opens a **two-panel mega-dropdown** (`Popular Study Destinations` on left, `More Countries (Europe)` on right) listing countries with national flags, live badges, and route links.
-5. **Login CTA Button (Right)**:
-   - **Style**: Solid deep navy-black pill (`bg-[#0F172A] text-white rounded-full px-6 py-3 font-bold text-base hover:scale-[1.02]`).
-   - Icon: `LogIn` lucide icon.
+### Specifications
+- **Position**: Sticky top (`sticky top-0 z-40 w-full`), backdrop blur (`backdrop-blur-lg`).
+- **Background**: Translucent White (`rgba(255, 255, 255, 0.80)`).
+- **Border**: Subtle bottom border (`1px solid rgba(0,0,0,0.04)`).
+- **Elements**:
+  1. **Brand Logo**: Text-only wordmark `edunex` (`#0F172A` for `edu`, `#475569` for `nex`), tightened letter spacing (`-0.03em`), linking to `/`.
+  2. **Global Search Trigger**: `⌘K` keyboard shortcut badge + search modal trigger (`GlobalSearchModal.tsx`).
+  3. **Theme Toggle**: Light/Dark theme toggle.
+  4. **Countries Mega-Dropdown**: Two-panel dropdown featuring Popular Destinations & European Countries with live status badges.
+  5. **Login Button**: Deep navy-black pill (`bg-[#0F172A] text-white rounded-full px-6 py-3 font-bold`), linked directly to `/login`.
 
 ---
 
-## 3. Hero Section (`page.tsx`)
+## 3. Landing Page Architecture (`/`)
 
-### Layout & Background
-- **Container**: Full-width section (`w-full min-h-[88vh] flex items-center justify-center relative overflow-hidden`).
-- **Background Image**: Full-bleed background image (`/images/hero_campus.png` — a wide European university campus scene with grand stone architecture and sunlit courtyards).
-- **Light Scrim Overlay**: 65% White wash overlay (`rgba(255, 255, 255, 0.65)`) spanning the entire hero section so the background photo is softly visible while text remains 100% legible.
-
-### Content Hierarchy (Centered Layout)
-1. **Eyebrow Badge**:
-   - Text: `🌍 NEXT-GEN STUDY ABROAD INTELLIGENCE PLATFORM`
-   - Style: Centered pill chip, uppercase, tracked text (`text-xs font-semibold tracking-widest bg-[rgba(0,0,0,0.06)] border-[1px solid rgba(0,0,0,0.1)] text-[#374151] rounded-full px-4 py-2`).
-2. **Dual-Weight Headline**:
-   - Switched to elegant Playfair Display serif typography.
-   - **Line 1 (Top)**: `"Study Abroad"` — Font weight **300 (Light)**, font size `text-5xl sm:text-6xl lg:text-7xl font-serif`, color `#0B1220`.
-   - **Line 2 (Bottom)**: `"Made Simple & Precise"` — Font weight **800 (Extrabold)**, font size `text-5xl sm:text-6xl lg:text-7xl font-serif`, color `#0B1220`.
-3. **Subtext Paragraph**:
-   - Text: `"University selection, visa processing, blocked accounts, and living cost optimization — all in one place."` (APS verification references removed).
-   - Style: Centered, `max-w-2xl text-lg sm:text-xl leading-relaxed font-sans`, color `#4B5563` (Warmer slate-gray), 2 lines max.
-4. **Pill CTA Button Group (Side-by-Side)**:
-   - **Primary Button (`Choose Destination`)**:
-     - Solid dark charcoal/black (`#111827`), white text, pill shape (`rounded-full`), `px-8 py-4 font-bold text-base`.
-     - Right arrow icon (`ArrowRight`) with smooth rightward hover animation.
-   - **Secondary Button (`Explore Countries`)**:
-     - Outline / Ghost style, transparent background, solid charcoal border (`2px solid rgba(0,0,0,0.75)`), dark text (`#111827`), pill shape (`rounded-full`), `px-8 py-4 font-bold text-base`.
-     - Smooth scroll to `#destinations` grid section.
+1. **Hero Section**:
+   - Full-bleed European campus background (`/images/hero_campus.png`) with a 65% white scrim wash.
+   - Eyebrow badge: `🌍 NEXT-GEN STUDY ABROAD INTELLIGENCE PLATFORM`.
+   - Headline in Playfair Display serif: `"Study Abroad"` (Light 300) + `"Made Simple & Precise"` (Extrabold 800).
+   - Side-by-side pill CTAs: `"Choose Destination"` (solid navy) & `"Explore Countries"` (outline ghost pill).
+2. **Destinations Grid**:
+   - Section `#destinations` with 3-column grid (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3`).
+   - 4:3 aspect ratio photo cards (`Germany`, `UK`, `Canada`, `USA`, `Australia`) with top flag badge, metrics, discipline tags, and `Explore →` button routing to country hubs.
+3. **Feature Showcase Section**:
+   - Alternating soft warm off-white background (`#F7F6F3`).
+   - Minimal borderless feature cards highlighting University Database, Visa & Application Guidance, Blocked Accounts, and Scholarships.
+4. **Footer**:
+   - Visual wordmark banner with graduate background (`/images/graduates_hero.png`).
+   - Charcoal navigation footer (`#0F0F0F`) with links to country hubs, admin portal (`/admin`), and copyright notice.
 
 ---
 
-## 4. Destinations Grid Section
+## 4. Standalone Authentication Pages (`/login` & `/signup`)
 
-### Header
-- Section ID: `#destinations`
-- Background: White (`bg-white`), padding `py-24 px-6 sm:px-12 lg:px-20 xl:px-28`.
-- Eyebrow: `GLOBAL DESTINATIONS` (`text-sm font-bold text-brand-600 uppercase tracking-wider`).
-- Title: `Select Your Study Destination` (`text-4xl sm:text-5xl font-bold tracking-tight text-slate-950 mt-2 font-serif` using Playfair Display).
-- Divider line below title (`border-b border-slate-200 pb-7`).
+### Layout & Component Structure
+- **Container**: Full-viewport centered layout on soft neutral background (`#F4F4F5`).
+- **Centered Split-Panel Card**:
+  - Max-width: `960px`, Height: ~`580px–600px`, Radius: `24px` (`rounded-3xl`), dual-shadow.
+  - **Left Panel (Form)**: White background, generous padding (`p-10`/`p-12`), edunex wordmark header, Playfair Display title, Inter subtext.
+  - **Right Panel (Visual)**: Full-bleed study-abroad campus image panel (`/images/auth_campus_panel.png`), `rounded-r-2xl`, overlaid with a frosted glass floating badge ("Your global education awaits" / "Start your journey today"). Responsive: hidden on screens smaller than `md`.
+- **Legal Disclaimer**: Centered bottom text with inline links to `/terms` and `/privacy`.
 
-### Destination Cards (3-Column Grid)
-- **Grid Ratio**: 3 columns (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6`).
-- **Card Format**:
-  - Full-bleed photo cards with `4:3` aspect ratio (`rounded-[20px] overflow-hidden shadow-xl`).
-  - Top-left circular flag badge (`w-10 h-10 rounded-full bg-white/90`).
-  - Top-right circular arrow button (`ArrowUpRight`).
-  - Bottom dark gradient overlay (`rgba(10,30,77,0.92)`) for high-contrast card information.
-  - Card Info: Country title (`font-serif` Playfair Display), key metrics (tuition range, number of universities, post-study work visa duration), discipline tags (`Engineering`, `Computer Sci`), and direct `Explore ->` action button (or `Lock Soon` badge).
+### Page 1: Login (`/login`)
+- **Title**: `Welcome back`
+- **Subtext**: `Login to your edunex account`
+- **Fields**: `Email` (`you@example.com`), `Password` (with top-right `Forgot your password?` link and show/hide toggle).
+- **Primary Button**: `Login` (`bg-[#0F172A] rounded-full text-white font-bold`).
+- **Social Row**: Apple, Google, Meta icon buttons (`rounded-xl` bordered white style).
+- **Footer Link**: `Don't have an account? Sign up` → routes to `/signup`.
 
----
-
-## 5. Feature Showcase Section
-
-- **Background**: Soft warm off-white (`#F7F6F3`) to create alternating contrast with the white destinations grid.
-- **Header**:
-  - Eyebrow: `ALL-IN-ONE CAPABILITIES` (`text-xs font-semibold uppercase tracking-[0.22em] text-[#9CA3AF]`).
-  - Title: `Engineered for Academic Success` (`text-4xl sm:text-5xl font-bold text-slate-900 leading-tight font-serif` using Playfair Display).
-  - Subtext: `edunex consolidates all critical tools and data points into a single seamless SaaS environment.` (`text-base leading-relaxed text-[#6B7280] font-sans`).
-- **Minimal Grid Cards**:
-  - Style: Completely borderless and shadowless layout (plain flat containers) aligned to the center.
-  - Icons: Contained inside simple circular wrappers with dark charcoal line-art styling.
-  - Card Titles: Rendered in `font-serif` Playfair Display.
-  - Center Card Highlight: Rebuilt with a subtle frosted background container (`bg-[rgba(0,0,0,0.03)] border-[1px solid rgba(0,0,0,0.06)]`) to add visual anchor point.
-  - Card 2 Detail (Country Agnostic): Replaced APS-specific messaging with **"Visa & Application Guidance"** covering checklists, documents, scheduling, and blocked accounts.
+### Page 2: Signup (`/signup`)
+- **Title**: `Create your account`
+- **Subtext**: `Get started with edunex today`
+- **Fields**: `Full Name`, `Email`, `Password` (with password length hint).
+- **Primary Button**: `Sign up` (`bg-[#0F172A] rounded-full text-white font-bold`).
+- **Social Row**: Apple, Google, Meta icon buttons.
+- **Footer Link**: `Already have an account? Login` → routes to `/login`.
 
 ---
 
-## 6. Footer Section
+## 5. Country Destination Hubs (`/[countrySlug]`, e.g., `/germany`)
 
-- **Footer Block 1 (Wordmark Visual Banner)**:
-  - Full-bleed wide format image backdrop (`/images/graduates_hero.png`) underneath a deep dark scrim (`rgba(10,10,10,0.68)`).
-  - Centered giant white branding text: `edunex` utilizing bold display spacing (`text-clamp(4rem, 14vw, 11rem) font-serif`), followed by tracking-spaced subtext `"Your Global Education Platform"`.
-- **Footer Block 2 (Information & Navigation Grid)**:
-  - Background: Near-black deep charcoal (`#0F0F0F`).
-  - Multi-column setup:
-    - Left side: Brand identity logo and tagline.
-    - Right side: Multi-category lists:
-      - **Platform**: Germany Hub, and coming-soon markers for UK, USA, and Canada.
-      - **Admin**: Link redirect for Admin Portal.
-  - Bottom Bar: Copyright notice (`© 2026 edunex Platform`) and student mission statement.
+### Reworked Layout & Aesthetics
+- **Main Container**: Expanded to `max-w-[1600px]`, reducing margins to give ~70% width ratio to main content data views.
+- **Hero Banner**: Deep navy charcoal gradient (`#0B1220` to `#1E293B`) with Playfair Display heading `"Study in Germany"`, pill eyebrow chip (`🇩🇪 DE COUNTRY PROFILE OVERVIEW`), description, and at-a-glance stat pills.
+- **Sidebar (`StickySidebar.tsx`)**:
+  - Fixed `w-64` sticky sidebar, edunex navy active state (`bg-[#0F172A]`), rounded-3xl container.
+  - **Modules**: Overview, Universities, Admission Req., Document Checklist, APS Certification, Visa Guide, Interactive Timeline, Scholarships, Living Cost, Accommodation, Part-Time Jobs, Health Insurance, Currency & Budget, Official Resources, FAQ Hub.
+  - *Cleaned*: "News & Updates" section removed.
+- **Fact & Metric Cards Grid**:
+  - 4-column grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`).
+  - Increased card padding (`p-5 sm:p-6`), larger label typography (`text-sm font-semibold`), larger numbers (`text-[1.2rem] font-bold` for key figures), and 20px icon badges.
+- **Verified Germany Data**:
+  - Blocked Account: `€11,904 / year (€992 / month)`
+  - Minimum Wage: `€12.82 / hour` (Updated 2025 German statutory rate)
+  - Intl. Student Count: `370,000+` (Verified Destatis figure)
+  - Semester Contribution: `€150 – €400 / semester`
 
 ---
 
-## 7. Key React / Next.js Implementation References
+## 6. Admin Portal (`/admin`)
 
-- **Main Page**: `client/src/app/page.tsx`
-- **Navbar Component**: `client/src/components/layout/TopNavbar.tsx`
-- **Hero Image Location**: `client/public/images/hero_campus.png`
-- **Icon Library**: `lucide-react`
-- **CSS Framework**: Tailwind CSS
+- Standalone administration interface for content managers.
+- Mock JWT authentication workflow (`admin@edunex.io` / `admin123`).
+- Management forms for adding Universities, updating APS guides, editing FAQs, and monitoring platform metrics.
+
+---
+
+## 7. Technical Stack & Vercel Deployment
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript (Strict mode enabled)
+- **Styling**: Tailwind CSS + Vanilla CSS tokens
+- **Icons**: Lucide React
+- **State & Data**: React Query (`@tanstack/react-query`) + Axios API Client with mock fallbacks
+- **Fonts**: Google Fonts (`Playfair Display` + `Inter` loaded via `next/font/google`)
+- **Hosting Ready**: Tested with zero-config Vercel build (`outputDirectory: client/.next`, static prerendering enabled, Suspense boundaries configured).
