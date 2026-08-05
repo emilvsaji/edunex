@@ -243,13 +243,14 @@ export default function TopNavbar({ countryName, activeModuleLabel }: Props) {
             </div>
 
             {/* Login */}
-            <button
+            <Link
+              href="/login"
               className="hidden sm:flex items-center gap-2 px-6 py-3 rounded-full font-bold text-base text-white transition-all hover:opacity-90 hover:scale-[1.02]"
               style={{ background: '#0F172A', boxShadow: '0 2px 14px rgba(0,0,0,0.20)' }}
             >
               <LogIn className="w-5 h-5" />
               Login
-            </button>
+            </Link>
           </div>
         </div>
       </header>

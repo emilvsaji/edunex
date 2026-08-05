@@ -22,7 +22,6 @@ import HealthInsuranceModule from '@/components/modules/HealthInsuranceModule';
 import CurrencyModule from '@/components/modules/CurrencyModule';
 import OfficialResourcesModule from '@/components/modules/OfficialResourcesModule';
 import FAQModule from '@/components/modules/FAQModule';
-import NewsModule from '@/components/modules/NewsModule';
 
 export default function DestinationDashboardPage() {
   const params = useParams();
@@ -97,8 +96,6 @@ export default function DestinationDashboardPage() {
         return <OfficialResourcesModule resources={country.officialResources || []} />;
       case 'faq':
         return <FAQModule faqs={country.faqs || []} />;
-      case 'news':
-        return <NewsModule />;
       default:
         return <OverviewModule country={country} />;
     }
@@ -110,7 +107,7 @@ export default function DestinationDashboardPage() {
       <TopNavbar countryName={country.name} activeModuleLabel={activeModuleItem.label} />
 
       {/* Main Dashboard Layout - Full Screen Ratio */}
-      <div className="max-w-[1536px] mx-auto w-full px-4 sm:px-8 lg:px-12 py-8 flex items-start gap-8 flex-1">
+      <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex items-start gap-6 flex-1">
         {/* Sticky Sidebar */}
         <StickySidebar
           activeModule={activeModule}
@@ -127,11 +124,12 @@ export default function DestinationDashboardPage() {
               <button
                 key={m.key}
                 onClick={() => handleSelectModule(m.key)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all ${
                   activeModule === m.key
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                style={activeModule === m.key ? { background: '#0F172A' } : {}}
               >
                 {m.label}
               </button>
