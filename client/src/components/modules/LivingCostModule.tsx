@@ -44,6 +44,24 @@ export default function LivingCostModule({ livingCosts }: { livingCosts: LivingC
         </div>
       </div>
 
+      {/* Disclaimer Callout */}
+      <div
+        className="flex items-start gap-3 rounded-2xl"
+        style={{
+          padding: '16px 20px',
+          background: '#F8FAFC',
+          border: '1px solid rgba(0,0,0,0.08)',
+        }}
+      >
+        <Info className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#64748B' }} />
+        <p className="text-xs leading-relaxed font-sans" style={{ color: '#64748B' }}>
+          <strong style={{ color: '#475569', fontWeight: 600 }}>Disclaimer:</strong> All living cost figures are
+          estimates based on average student spending patterns. Actual costs can vary significantly depending on
+          your lifestyle, type of accommodation, personal spending habits, dietary choices, and exact location
+          within the city. These figures are provided as a planning guide only.
+        </p>
+      </div>
+
       {/* City Comparison Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {livingCosts.map((lc) => {
