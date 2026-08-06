@@ -8,8 +8,6 @@ import {
   Euro,
   ShieldCheck,
   CheckCircle2,
-  ExternalLink,
-  Building2,
 } from 'lucide-react';
 
 export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: PartTimeJobInfo[] }) {
@@ -20,84 +18,209 @@ export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: Par
   }
 
   const popularJobs: string[] = jobInfo.popularJobsJson ? JSON.parse(jobInfo.popularJobsJson) : [];
-  const portals: string[] = jobInfo.jobPortalsJson ? JSON.parse(jobInfo.jobPortalsJson) : [];
+
+  // ── Neutral stat cards matching OverviewModule style ────────────────────────
+  const statCards = [
+    {
+      label: 'Allowed Work Limit',
+      value: jobInfo.allowedHours,
+      icon: Clock,
+      iconBg: 'bg-slate-100',
+      iconColor: 'text-slate-600',
+      isHighlight: false,
+    },
+    {
+      label: 'Statutory Minimum Wage',
+      value: jobInfo.minWage,
+      icon: Euro,
+      iconBg: 'bg-slate-100',
+      iconColor: 'text-slate-600',
+      isHighlight: true,
+    },
+    {
+      label: 'Tax-Free Mini-Job Cap',
+      value: jobInfo.miniJobCap,
+      icon: ShieldCheck,
+      iconBg: 'bg-slate-100',
+      iconColor: 'text-slate-600',
+      isHighlight: true,
+    },
+  ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 text-white shadow-xl space-y-4">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold border border-white/20">
-          <Briefcase className="w-4 h-4 text-amber-200 mr-1" /> German Student Labor Law Guidelines
+
+      {/* ── Section Header (neutral dark navy, matching Overview/Visa style) ── */}
+      <div
+        className="relative rounded-3xl overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #0B1220 0%, #1E293B 60%, #0F172A 100%)',
+          boxShadow: '0 8px 40px rgba(11,18,32,0.28)',
+        }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 80% 20%, rgba(37,99,235,0.12) 0%, transparent 55%), radial-gradient(circle at 10% 80%, rgba(255,255,255,0.04) 0%, transparent 50%)',
+          }}
+        />
+        <div className="relative z-10 px-5 py-6 sm:px-10 sm:py-10">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 text-xs font-semibold uppercase tracking-widest"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>German Student Labor Law Guidelines</span>
+          </div>
+          <h2
+            className="font-serif font-bold text-white mb-3"
+            style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.2 }}
+          >
+            Part-Time Jobs &amp; Working Rights
+          </h2>
+          <p
+            className="font-sans leading-relaxed max-w-2xl"
+            style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.9375rem' }}
+          >
+            Everything international students need to know about working limits, tax rules, and earning options in Germany.
+          </p>
         </div>
-        <h1 className="text-3xl font-extrabold tracking-tight">Part-Time Jobs & Working Rights</h1>
-        <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-3xl">
-          Everything international students need to know about working limits, tax rules, and earning options in Germany.
-        </p>
       </div>
 
-      {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center space-x-4">
-          <div className="p-3 rounded-2xl bg-orange-500/10 text-orange-500">
-            <Clock className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-xs text-zinc-400 font-medium">Allowed Work Limit</span>
-            <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{jobInfo.allowedHours}</p>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center space-x-4">
-          <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500">
-            <Euro className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-xs text-zinc-400 font-medium">Statutory Minimum Wage</span>
-            <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{jobInfo.minWage}</p>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center space-x-4">
-          <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
-            <ShieldCheck className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-xs text-zinc-400 font-medium">Tax-Free Mini-Job Cap</span>
-            <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{jobInfo.miniJobCap}</p>
-          </div>
+      {/* ── Quick Stats Grid (neutral white, matching Overview) ─────────────── */}
+      <div>
+        <h3 className="font-serif font-bold mb-4" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+          Key Working Rules at a Glance
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {statCards.map((card, i) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={i}
+                className="group rounded-2xl bg-white transition-all duration-200"
+                style={{
+                  padding: '20px 22px',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                }}
+                onMouseOver={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(37,99,235,0.25)';
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 16px rgba(37,99,235,0.08)';
+                }}
+                onMouseOut={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.08)';
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
+                }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold font-sans" style={{ color: '#4B5563' }}>
+                    {card.label}
+                  </span>
+                  <div className={`p-2 rounded-xl ${card.iconBg} group-hover:scale-110 transition-transform`}>
+                    <Icon className={`w-5 h-5 ${card.iconColor}`} />
+                  </div>
+                </div>
+                <p
+                  className="font-bold font-sans tracking-tight leading-tight"
+                  style={{
+                    fontSize: card.isHighlight ? '1.15rem' : '0.9rem',
+                    color: '#0F172A',
+                  }}
+                >
+                  {card.value}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Tax & Semester Rules Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center">
-            <ShieldCheck className="w-4 h-4 text-emerald-500 mr-2" /> Semester Working Rules
+      {/* ── Tax & Semester Rules ─────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div
+          className="rounded-2xl bg-white"
+          style={{
+            padding: '24px 28px',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          }}
+        >
+          <h3
+            className="font-serif font-bold flex items-center gap-2 mb-3"
+            style={{ fontSize: '1rem', color: '#0F172A' }}
+          >
+            <ShieldCheck className="w-4 h-4" style={{ color: '#2563EB' }} />
+            Semester Working Rules
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{jobInfo.semesterRules}</p>
+          <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>{jobInfo.semesterRules}</p>
         </div>
 
-        <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center">
-            <Clock className="w-4 h-4 text-orange-500 mr-2" /> Holiday / Break Rules
+        <div
+          className="rounded-2xl bg-white"
+          style={{
+            padding: '24px 28px',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          }}
+        >
+          <h3
+            className="font-serif font-bold flex items-center gap-2 mb-3"
+            style={{ fontSize: '1rem', color: '#0F172A' }}
+          >
+            <Clock className="w-4 h-4" style={{ color: '#2563EB' }} />
+            Holiday / Break Rules
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{jobInfo.holidayRules}</p>
+          <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>{jobInfo.holidayRules}</p>
         </div>
       </div>
 
-      {/* Popular Student Jobs List */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-          Popular Student Roles & Average Pay
+      {/* ── Tax Rules Info ──────────────────────────────────────────────────── */}
+      <div
+        className="rounded-2xl bg-white"
+        style={{
+          padding: '24px 28px',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+        }}
+      >
+        <h3
+          className="font-serif font-bold flex items-center gap-2 mb-3"
+          style={{ fontSize: '1rem', color: '#0F172A' }}
+        >
+          <Euro className="w-4 h-4" style={{ color: '#2563EB' }} />
+          Income Tax Rules
+        </h3>
+        <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>{jobInfo.taxRules}</p>
+      </div>
+
+      {/* ── Popular Student Jobs ─────────────────────────────────────────────── */}
+      <div
+        className="rounded-3xl bg-white"
+        style={{
+          padding: '28px 32px',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+        }}
+      >
+        <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+          Popular Student Roles &amp; Average Pay
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {popularJobs.map((job, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 flex items-center space-x-3"
+              className="p-3.5 rounded-2xl flex items-center space-x-3"
+              style={{ background: '#F7F6F3', border: '1px solid rgba(0,0,0,0.06)' }}
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-              <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{job}</span>
+              <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: '#2563EB' }} />
+              <span className="text-xs font-semibold" style={{ color: '#0F172A' }}>{job}</span>
             </div>
           ))}
         </div>

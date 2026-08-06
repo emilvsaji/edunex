@@ -13,6 +13,7 @@ import {
   Calculator,
   MapPin,
   Euro,
+  Info,
 } from 'lucide-react';
 
 export default function LivingCostModule({ livingCosts }: { livingCosts: LivingCostCity[] }) {
