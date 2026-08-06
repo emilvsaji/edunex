@@ -183,84 +183,135 @@ export default function LandingPage() {
 
         {/* 3-column photo card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {cards.map((card) => (
-            <div
-              key={card.slug}
-              className="relative rounded-[20px] overflow-hidden shadow-xl group transition-transform duration-300 hover:scale-[1.015] hover:shadow-2xl"
-              style={{ aspectRatio: '4 / 3' }}
-            >
-              {/* Full-bleed photo */}
-              <Image
-                src={card.image}
-                alt={card.title}
-                fill
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-              />
+          {cards.map((card) =>
+            card.available ? (
+              <Link
+                key={card.slug}
+                href={`/${card.slug}`}
+                className="relative rounded-[20px] overflow-hidden shadow-xl group transition-transform duration-300 hover:scale-[1.015] hover:shadow-2xl block text-left"
+                style={{ aspectRatio: '4 / 3' }}
+              >
+                {/* Full-bleed photo */}
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                />
 
-              {/* Top-left: circular flag badge */}
-              <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-2xl shadow-md border border-white/60 z-10">
-                {card.flag}
-              </div>
-
-              {/* Top-right: expand arrow button */}
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md border border-white/30 z-10 group-hover:bg-white transition-colors">
-                <ArrowUpRight className="w-5 h-5 text-slate-700" />
-              </div>
-
-              {/* Bottom dark blue gradient overlay */}
-              <div
-                className="absolute inset-0 z-10"
-                style={{ background: 'linear-gradient(to top, rgba(10,30,77,0.92) 0%, rgba(10,30,77,0.6) 45%, transparent 75%)' }}
-              />
-
-              {/* Overlay content */}
-              <div className="absolute bottom-0 left-0 right-0 z-20 p-5 flex flex-col gap-3">
-                {/* Title */}
-                <h3 className="text-[22px] font-bold text-white leading-snug drop-shadow-sm">
-                  {card.title}
-                </h3>
-
-                {/* Stats row */}
-                <div className="flex items-center gap-4 flex-wrap">
-                  {card.stats.map((s) => {
-                    const Icon = s.icon;
-                    return (
-                      <div key={s.label} className="flex items-center gap-1.5 text-white/90">
-                        <Icon className="w-3.5 h-3.5 opacity-75 shrink-0" />
-                        <span className="text-[13px] font-medium">{s.label}</span>
-                      </div>
-                    );
-                  })}
+                {/* Top-left: circular flag badge */}
+                <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-2xl shadow-md border border-white/60 z-10">
+                  {card.flag}
                 </div>
 
-                {/* Tag pills + CTA */}
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex flex-wrap gap-1.5">
-                    {card.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 rounded-full text-[12px] font-semibold text-white border border-white/25 bg-white/15 backdrop-blur-sm"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                {/* Top-right: expand arrow button */}
+                <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md border border-white/30 z-10 group-hover:bg-white transition-colors">
+                  <ArrowUpRight className="w-5 h-5 text-slate-700" />
+                </div>
+
+                {/* Bottom dark blue gradient overlay */}
+                <div
+                  className="absolute inset-0 z-10"
+                  style={{ background: 'linear-gradient(to top, rgba(10,30,77,0.92) 0%, rgba(10,30,77,0.6) 45%, transparent 75%)' }}
+                />
+
+                {/* Overlay content */}
+                <div className="absolute bottom-0 left-0 right-0 z-20 p-5 flex flex-col gap-3">
+                  <h3 className="text-[22px] font-bold text-white leading-snug drop-shadow-sm">
+                    {card.title}
+                  </h3>
+
+                  <div className="flex items-center gap-4 flex-wrap">
+                    {card.stats.map((s) => {
+                      const Icon = s.icon;
+                      return (
+                        <div key={s.label} className="flex items-center gap-1.5 text-white/90">
+                          <Icon className="w-3.5 h-3.5 opacity-75 shrink-0" />
+                          <span className="text-[13px] font-medium">{s.label}</span>
+                        </div>
+                      );
+                    })}
                   </div>
-                  {card.available ? (
-                    <Link
-                      href={`/${card.slug}`}
-                      className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#0A1E4D] text-[13px] font-extrabold shadow-md hover:bg-blue-50 transition-colors"
-                    >
+
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex flex-wrap gap-1.5">
+                      {card.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 rounded-full text-[12px] font-semibold text-white border border-white/25 bg-white/15 backdrop-blur-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#0A1E4D] text-[13px] font-extrabold shadow-md group-hover:bg-blue-50 transition-colors">
                       Explore <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  ) : (
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ) : (
+              <div
+                key={card.slug}
+                className="relative rounded-[20px] overflow-hidden shadow-xl group transition-transform duration-300 block text-left"
+                style={{ aspectRatio: '4 / 3' }}
+              >
+                {/* Full-bleed photo */}
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover object-center opacity-80"
+                />
+
+                {/* Top-left: circular flag badge */}
+                <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-2xl shadow-md border border-white/60 z-10">
+                  {card.flag}
+                </div>
+
+                {/* Bottom dark blue gradient overlay */}
+                <div
+                  className="absolute inset-0 z-10"
+                  style={{ background: 'linear-gradient(to top, rgba(10,30,77,0.92) 0%, rgba(10,30,77,0.6) 45%, transparent 75%)' }}
+                />
+
+                {/* Overlay content */}
+                <div className="absolute bottom-0 left-0 right-0 z-20 p-5 flex flex-col gap-3">
+                  <h3 className="text-[22px] font-bold text-white leading-snug drop-shadow-sm">
+                    {card.title}
+                  </h3>
+
+                  <div className="flex items-center gap-4 flex-wrap">
+                    {card.stats.map((s) => {
+                      const Icon = s.icon;
+                      return (
+                        <div key={s.label} className="flex items-center gap-1.5 text-white/90">
+                          <Icon className="w-3.5 h-3.5 opacity-75 shrink-0" />
+                          <span className="text-[13px] font-medium">{s.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex flex-wrap gap-1.5">
+                      {card.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 rounded-full text-[12px] font-semibold text-white border border-white/25 bg-white/15 backdrop-blur-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                     <span className="shrink-0 flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white/15 text-white/60 text-[12px] font-semibold border border-white/20">
                       <Lock className="w-3 h-3" /> Soon
                     </span>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </section>
 

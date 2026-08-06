@@ -251,7 +251,7 @@ function getFallbackCountries(): Country[] {
   ];
 }
 
-function getFallbackGermanyData(): Country {
+export function getFallbackGermanyData(): Country {
   return {
     id: 'c-de',
     name: 'Germany',

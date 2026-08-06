@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { countryService } from '@/services/api';
+import { countryService, getFallbackGermanyData } from '@/services/api';
 import { Country } from '@/types';
 import TopNavbar from '@/components/layout/TopNavbar';
 import StickySidebar, { MODULES_LIST } from '@/components/layout/StickySidebar';
@@ -31,14 +31,18 @@ function DestinationDashboardContent() {
   const countrySlug = (params?.countrySlug as string) || 'germany';
   const initialModule = searchParams.get('module') || 'overview';
 
-  const [country, setCountry] = useState<Country | null>(null);
+  const [country, setCountry] = useState<Country | null>(() => {
+    if (countrySlug === 'germany') {
+      return getFallbackGermanyData();
+    }
+    return null;
+  });
   const [activeModule, setActiveModule] = useState<string>(initialModule);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => countrySlug !== 'germany');
 
   useEffect(() => {
-    setIsLoading(true);
     countryService.getBySlug(countrySlug).then((data) => {
-      setCountry(data);
+      if (data) setCountry(data);
       setIsLoading(false);
     });
   }, [countrySlug]);
