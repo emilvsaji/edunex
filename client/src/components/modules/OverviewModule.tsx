@@ -23,26 +23,26 @@ import {
 // Values that represent a key number get larger display treatment (isHighlight)
 function buildCards(country: Country) {
   return [
-    { label: 'Capital',             value: country.capital              || 'Berlin',                           icon: Landmark,    color: 'text-amber-500 bg-amber-500/10',   isHighlight: false },
-    { label: 'Currency',            value: country.currency             || 'Euro (€)',                         icon: Euro,        color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
-    { label: 'Primary Language',    value: country.language             || 'German (English for Masters)',      icon: Languages,   color: 'text-blue-500 bg-blue-500/10',     isHighlight: false },
-    { label: 'Population',          value: country.population           || '84.4 Million',                     icon: Users,       color: 'text-indigo-500 bg-indigo-500/10', isHighlight: false },
-    { label: 'Intl. Students',      value: country.intStudentsCount     || '370,000+',                         icon: GraduationCap, color: 'text-purple-500 bg-purple-500/10', isHighlight: true  },
-    { label: 'Average Tuition',     value: country.avgTuition           || '€0 – €3,000 / yr',                 icon: Euro,        color: 'text-teal-500 bg-teal-500/10',     isHighlight: true  },
-    { label: 'Semester Contribution', value: country.semesterContrib    || '€150 – €400 / semester',           icon: BookOpen,    color: 'text-cyan-500 bg-cyan-500/10',     isHighlight: false },
-    { label: 'Blocked Account',     value: country.blockedAccountAmt    || '€11,904 / year',                   icon: PiggyBank,   color: 'text-rose-500 bg-rose-500/10',     isHighlight: true  },
-    { label: 'Minimum Wage',        value: country.minWage              || '€12.82 / hour',                    icon: Briefcase,   color: 'text-orange-500 bg-orange-500/10', isHighlight: true  },
-    { label: 'Avg. Living Cost',    value: country.avgLivingCost        || '€934 – €1,100 / month',            icon: Building2,   color: 'text-sky-500 bg-sky-500/10',       isHighlight: true  },
-    { label: 'Public Universities', value: `${country.publicUnivCount  || 300}+`,                             icon: Building,    color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
-    { label: 'Private Universities', value: `${country.privateUnivCount || 100}+`,                            icon: Building2,   color: 'text-violet-500 bg-violet-500/10', isHighlight: false },
-    { label: 'Climate',             value: country.climate              || 'Temperate (–2°C to 25°C)',         icon: CloudSun,    color: 'text-yellow-500 bg-yellow-500/10', isHighlight: false },
-    { label: 'Time Zone',           value: country.timeDiff             || 'UTC+1 (CET) / UTC+2 (CEST)',      icon: Clock,       color: 'text-slate-500 bg-slate-500/10',   isHighlight: false },
-    { label: 'Safety Index',        value: country.safetyIndex          || '75.2 (Very Safe) est.',            icon: ShieldCheck, color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
+    { label: 'Capital', value: country.capital || 'Berlin', icon: Landmark, color: 'text-amber-500 bg-amber-500/10', isHighlight: false },
+    { label: 'Currency', value: country.currency || 'Euro (€)', icon: Euro, color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
+    { label: 'Primary Language', value: country.language || 'German (English for Masters)', icon: Languages, color: 'text-blue-500 bg-blue-500/10', isHighlight: false },
+    { label: 'Population', value: country.population || '84.4 Million', icon: Users, color: 'text-indigo-500 bg-indigo-500/10', isHighlight: false },
+    { label: 'Intl. Students', value: country.intStudentsCount || '370,000+', icon: GraduationCap, color: 'text-purple-500 bg-purple-500/10', isHighlight: true },
+    { label: 'Average Tuition', value: country.avgTuition || '€0 – €3,000 / yr', icon: Euro, color: 'text-teal-500 bg-teal-500/10', isHighlight: true },
+    { label: 'Semester Contribution', value: country.semesterContrib || '€150 – €400 / semester', icon: BookOpen, color: 'text-cyan-500 bg-cyan-500/10', isHighlight: false },
+    { label: 'Blocked Account', value: country.blockedAccountAmt || '€11,904 / year', icon: PiggyBank, color: 'text-rose-500 bg-rose-500/10', isHighlight: true },
+    { label: 'Minimum Wage', value: country.minWage || '€12.82 / hour', icon: Briefcase, color: 'text-orange-500 bg-orange-500/10', isHighlight: true },
+    { label: 'Avg. Living Cost', value: country.avgLivingCost || '€934 – €1,100 / month', icon: Building2, color: 'text-sky-500 bg-sky-500/10', isHighlight: true },
+    { label: 'Public Universities', value: `${country.publicUnivCount || 300}+`, icon: Building, color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
+    { label: 'Private Universities', value: `${country.privateUnivCount || 100}+`, icon: Building2, color: 'text-violet-500 bg-violet-500/10', isHighlight: false },
+    { label: 'Climate', value: country.climate || 'Temperate (–2°C to 25°C)', icon: CloudSun, color: 'text-yellow-500 bg-yellow-500/10', isHighlight: false },
+    { label: 'Time Zone', value: country.timeDiff || 'UTC+1 (CET) / UTC+2 (CEST)', icon: Clock, color: 'text-slate-500 bg-slate-500/10', isHighlight: false },
+    { label: 'Safety Index', value: country.safetyIndex || '75.2 (Very Safe) est.', icon: ShieldCheck, color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
   ];
 }
 
 export default function OverviewModule({ country }: { country: Country }) {
-  const topCities: string[]     = country.topCities     ? JSON.parse(country.topCities)     : [];
+  const topCities: string[] = country.topCities ? JSON.parse(country.topCities) : [];
   const popularCourses: string[] = country.popularCourses ? JSON.parse(country.popularCourses) : [];
   const cards = buildCards(country);
 
@@ -100,10 +100,10 @@ export default function OverviewModule({ country }: { country: Country }) {
           {/* Quick stats strip */}
           <div className="flex flex-wrap gap-4 mt-6">
             {[
-              { label: 'Avg. Tuition',    value: country.avgTuition     || '€0 – €3k / yr'           },
-              { label: 'Living Cost',     value: country.avgLivingCost  || '€934 – €1,100 / month'   },
-              { label: 'Work Rights',     value: country.workHours      || '140 full days / year'     },
-              { label: 'Intakes',         value: country.popularIntake  || 'Winter & Summer'          },
+              { label: 'Avg. Tuition', value: country.avgTuition || '€0 – €3k / yr' },
+              { label: 'Living Cost', value: country.avgLivingCost || '€934 – €1,100 / month' },
+              { label: 'Work Rights', value: country.workHours || '140 full days / year' },
+              { label: 'Intakes', value: country.popularIntake || 'Winter & Summer' },
             ].map((stat) => (
               <div
                 key={stat.label}
