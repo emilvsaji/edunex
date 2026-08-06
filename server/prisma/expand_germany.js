@@ -1,25 +1,53 @@
 "use strict";
-// expand_germany.js — Adds expanded Germany data on top of the baseline seed
-// Run with: node prisma/expand_germany.js
-
+// expand_germany.js — Adds expanded Germany data on top of the baseline seed with retry logic
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log("🔄 Expanding Germany data...");
+async function withRetry(fn, retries = 5, delayMs = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      console.log(`  ⚠️ Connection issue (${err.message.slice(0, 60)}...). Retrying in ${delayMs}ms (${i + 1}/${retries})...`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+}
 
-  const germany = await prisma.country.findUnique({ where: { slug: "germany" } });
+async function main() {
+  console.log("🔄 Expanding Germany data on Neon PostgreSQL...");
+
+  const germany = await withRetry(() => prisma.country.findUnique({ where: { slug: "germany" } }));
   if (!germany) throw new Error("Germany country not found. Run seed.js first.");
 
   // Correct minWage on Germany country record
-  await prisma.country.update({
-    where: { slug: "germany" },
-    data: { minWage: "€12.82 / hour" },
-  });
-  console.log("  ✓ Updated minWage to €12.82 / hour");
+  await withRetry(() =>
+    prisma.country.update({
+      where: { slug: "germany" },
+      data: { minWage: "€13.90 / hour" },
+    })
+  );
+  console.log("  ✓ Updated minWage to €13.90 / hour");
+
+  // Update PartTimeJobInfo record
+  const jobInfos = await withRetry(() => prisma.partTimeJobInfo.findMany({ where: { countryId: germany.id } }));
+  for (const job of jobInfos) {
+    await withRetry(() =>
+      prisma.partTimeJobInfo.update({
+        where: { id: job.id },
+        data: {
+          minWage: "€13.90 / hour (Legal statutory minimum wage as of 2026)",
+          miniJobCap: "€556 / month (Tax-free and social security exempt limit)",
+          taxRules: "Mini-jobs under €556/month are tax-free. Earnings above €556 require tax class 1 registration, but income tax is refunded via annual tax return.",
+        },
+      })
+    );
+  }
+  console.log("  ✓ Updated PartTimeJobInfo to €13.90/hr minWage and €556/mo miniJobCap");
 
   // ─── Extra Cities ──────────────────────────────────────────────────────────
-  const existingCities = await prisma.city.findMany({ where: { countryId: germany.id } });
+  const existingCities = await withRetry(() => prisma.city.findMany({ where: { countryId: germany.id } }));
   const existingCityNames = existingCities.map((c) => c.name);
 
   const newCities = [
@@ -36,7 +64,7 @@ async function main() {
   const createdCities = {};
   for (const city of newCities) {
     if (!existingCityNames.includes(city.name)) {
-      const created = await prisma.city.create({ data: { countryId: germany.id, ...city } });
+      const created = await withRetry(() => prisma.city.create({ data: { countryId: germany.id, ...city } }));
       createdCities[city.name] = created.id;
       console.log("  ✓ Created city:", city.name);
     } else {
@@ -51,7 +79,7 @@ async function main() {
   const hamburgCity = existingCities.find((c) => c.name === "Hamburg");
 
   // ─── Extra Universities ────────────────────────────────────────────────────
-  const existingUnis = await prisma.university.findMany({ where: { countryId: germany.id } });
+  const existingUnis = await withRetry(() => prisma.university.findMany({ where: { countryId: germany.id } }));
   const existingSlugs = existingUnis.map((u) => u.slug);
 
   const newUniversities = [
@@ -62,8 +90,8 @@ async function main() {
       type: "Public",
       qsRanking: 98,
       cityName: "Berlin",
-      logoUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&auto=format&fit=crop&q=80",
-      coverUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&auto=format&fit=crop&q=80",
+      coverUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€311 / semester",
       tuitionFee: "€0 (Tuition Free)",
       hasEnglishPrograms: true,
@@ -79,7 +107,7 @@ async function main() {
       type: "Public",
       qsRanking: 87,
       cityName: "Heidelberg",
-      logoUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€1,500 / semester (Non-EU BW state fee)",
       tuitionFee: "€3,000 / year",
@@ -96,7 +124,7 @@ async function main() {
       type: "Public",
       qsRanking: 368,
       cityName: "Stuttgart",
-      logoUrl: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€1,500 / semester (Non-EU BW fee)",
       tuitionFee: "€3,000 / year",
@@ -113,7 +141,7 @@ async function main() {
       type: "Public",
       qsRanking: 310,
       cityName: "Frankfurt",
-      logoUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€315 / semester",
       tuitionFee: "€0 (Tuition Free)",
@@ -130,7 +158,7 @@ async function main() {
       type: "Public",
       qsRanking: 276,
       cityName: "Hamburg",
-      logoUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€345 / semester",
       tuitionFee: "€0 (Tuition Free)",
@@ -147,8 +175,8 @@ async function main() {
       type: "Public",
       qsRanking: 215,
       cityName: "Cologne",
-      logoUrl: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=400&auto=format&fit=crop&q=80",
-      coverUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&auto=format&fit=crop&q=80",
+      coverUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€293 / semester",
       tuitionFee: "€0 (Tuition Free)",
       hasEnglishPrograms: true,
@@ -164,7 +192,7 @@ async function main() {
       type: "Public",
       qsRanking: 296,
       cityName: "Gottingen",
-      logoUrl: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€380 / semester",
       tuitionFee: "€0 (Tuition Free)",
@@ -181,7 +209,7 @@ async function main() {
       type: "Public",
       qsRanking: 267,
       cityName: "Dresden",
-      logoUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€258 / semester",
       tuitionFee: "€0 (Tuition Free)",
@@ -198,8 +226,8 @@ async function main() {
       type: "Public",
       qsRanking: 521,
       cityName: "Mannheim",
-      logoUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&auto=format&fit=crop&q=80",
-      coverUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=400&auto=format&fit=crop&q=80",
+      coverUrl: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€1,500 / semester (Non-EU BW fee)",
       tuitionFee: "€3,000 / year",
       hasEnglishPrograms: true,
@@ -215,7 +243,7 @@ async function main() {
       type: "Private",
       qsRanking: 355,
       cityName: "Frankfurt",
-      logoUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1562774053-701939374585?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€4,000 - €8,000 / semester",
       tuitionFee: "€8,000 - €16,000 / year",
@@ -232,7 +260,7 @@ async function main() {
       type: "Private",
       qsRanking: 471,
       cityName: "Berlin",
-      logoUrl: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=400&auto=format&fit=crop&q=80",
+      logoUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400&auto=format&fit=crop&q=80",
       coverUrl: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=1200&auto=format&fit=crop&q=80",
       semesterFee: "€5,000 - €9,000 / semester",
       tuitionFee: "€10,000 - €18,000 / year",
@@ -246,7 +274,7 @@ async function main() {
 
   for (const uni of newUniversities) {
     if (!existingSlugs.includes(uni.slug)) {
-      await prisma.university.create({ data: { countryId: germany.id, ...uni } });
+      await withRetry(() => prisma.university.create({ data: { countryId: germany.id, ...uni } }));
       console.log("  ✓ Created university:", uni.name);
     } else {
       console.log("  → Skipped (exists):", uni.name);
@@ -254,7 +282,7 @@ async function main() {
   }
 
   // ─── Extra Scholarships ────────────────────────────────────────────────────
-  const existingScholarships = await prisma.scholarship.findMany({ where: { countryId: germany.id } });
+  const existingScholarships = await withRetry(() => prisma.scholarship.findMany({ where: { countryId: germany.id } }));
   const existingSchTitles = existingScholarships.map((s) => s.title);
 
   const newScholarships = [
@@ -312,7 +340,7 @@ async function main() {
 
   for (const sch of newScholarships) {
     if (!existingSchTitles.includes(sch.title)) {
-      await prisma.scholarship.create({ data: { countryId: germany.id, ...sch } });
+      await withRetry(() => prisma.scholarship.create({ data: { countryId: germany.id, ...sch } }));
       console.log("  ✓ Created scholarship:", sch.title);
     } else {
       console.log("  → Skipped (exists):", sch.title);
@@ -320,7 +348,7 @@ async function main() {
   }
 
   // ─── Extra Living Cost Cities ──────────────────────────────────────────────
-  const existingLC = await prisma.livingCostCity.findMany({ where: { countryId: germany.id } });
+  const existingLC = await withRetry(() => prisma.livingCostCity.findMany({ where: { countryId: germany.id } }));
   const existingLCNames = existingLC.map((c) => c.cityName);
 
   const newLivingCosts = [
@@ -336,7 +364,7 @@ async function main() {
 
   for (const lc of newLivingCosts) {
     if (!existingLCNames.includes(lc.cityName)) {
-      await prisma.livingCostCity.create({ data: { countryId: germany.id, ...lc } });
+      await withRetry(() => prisma.livingCostCity.create({ data: { countryId: germany.id, ...lc } }));
       console.log("  ✓ Created living cost city:", lc.cityName);
     } else {
       console.log("  → Skipped (exists):", lc.cityName);
@@ -344,7 +372,7 @@ async function main() {
   }
 
   // ─── Extra Health Insurance Providers ─────────────────────────────────────
-  const existingIns = await prisma.insuranceOption.findMany({ where: { countryId: germany.id } });
+  const existingIns = await withRetry(() => prisma.insuranceOption.findMany({ where: { countryId: germany.id } }));
   const existingInsNames = existingIns.map((i) => i.providerName);
 
   const newInsurance = [
@@ -392,16 +420,21 @@ async function main() {
 
   for (const ins of newInsurance) {
     if (!existingInsNames.includes(ins.providerName)) {
-      await prisma.insuranceOption.create({ data: { countryId: germany.id, ...ins } });
+      await withRetry(() => prisma.insuranceOption.create({ data: { countryId: germany.id, ...ins } }));
       console.log("  ✓ Created insurance provider:", ins.providerName);
     } else {
       console.log("  → Skipped (exists):", ins.providerName);
     }
   }
 
-  console.log("\n✅ Germany data expansion complete!");
+  console.log("\n✅ Germany data expansion complete on Neon PostgreSQL!");
 }
 
 main()
-  .catch((e) => { console.error("Error:", e); process.exit(1); })
-  .finally(async () => { await prisma.$disconnect(); });
+  .catch((e) => {
+    console.error("Error:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

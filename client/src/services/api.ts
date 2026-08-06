@@ -271,7 +271,7 @@ function getFallbackGermanyData(): Country {
     intStudentsCount: '370,000+',
     semesterContrib: '€150 - €400 / semester (Includes Transit Pass)',
     blockedAccountAmt: '€11,904 / year (€992 / month)',
-    minWage: '€12.82 / hour',
+    minWage: '€13.90 / hour',
     publicUnivCount: 300,
     privateUnivCount: 100,
     topCities: JSON.stringify(['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Aachen', 'Karlsruhe']),
@@ -560,7 +560,7 @@ function getFallbackGermanyData(): Country {
       { id: 'acc-3', type: 'Private Apartment', avgCostRange: '€600 - €1,200 / month', depositRequired: '3 months cold rent', bookingPortals: 'Immobilienscout24.de, HousingAnywhere', tips: 'Ensure landlord provides Wohnungsgeberbestätigung for Anmeldung.', pros: 'Complete privacy, quiet environment.', cons: 'Expensive, often unfurnished.' },
     ],
     partTimeJobs: [
-      { id: 'pt-1', allowedHours: '140 full days (280 half days) per calendar year', minWage: '€12.82 / hour', miniJobCap: '€538 / month (Tax-free limit)', taxRules: 'Mini-jobs under €538/month are tax-free.', popularJobsJson: JSON.stringify(['Working Student (Werkstudent IT/Engg): €14 - €22/hr', 'HiWi Research Assistant: €13 - €16/hr', 'English Tutor: €15 - €25/hr', 'Supermarket Cashier: €13 - €15/hr', 'Delivery Rider: €13 - €16/hr']), semesterRules: 'Max 20 hours per week during active semester.', holidayRules: 'Full-time work allowed during official semester break.', jobPortalsJson: JSON.stringify(['Zenjob App', 'StepStone.de', 'Indeed Germany', 'Linkedin Student Jobs']) },
+      { id: 'pt-1', allowedHours: '140 full days (280 half days) per calendar year', minWage: '€13.90 / hour', miniJobCap: '€556 / month (Tax-free limit)', taxRules: 'Mini-jobs under €556/month are tax-free.', popularJobsJson: JSON.stringify(['Working Student (Werkstudent IT/Engg): €14 - €22/hr', 'HiWi Research Assistant: €13 - €16/hr', 'English Tutor: €15 - €25/hr', 'Supermarket Cashier: €13 - €15/hr', 'Delivery Rider: €13 - €16/hr']), semesterRules: 'Max 20 hours per week during active semester.', holidayRules: 'Full-time work allowed during official semester break.', jobPortalsJson: JSON.stringify(['Zenjob App', 'StepStone.de', 'Indeed Germany', 'Linkedin Student Jobs']) },
     ],
     insurances: [
       { id: 'ins-1', type: 'Public', providerName: 'Techniker Krankenkasse (TK)', monthlyCost: '~€125 - €130 / month', requirements: 'Mandatory for degree students under 30.', coverageDetails: '100% full coverage for doctors, hospitals, and prescriptions.', pros: 'Voted #1 health insurance, English app.', cons: 'Higher monthly premium than private alternative.', recommendedFor: 'All degree students under 30 looking for comprehensive coverage.' },

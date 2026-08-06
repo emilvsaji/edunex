@@ -34,7 +34,7 @@
   - 🎓 **Scholarships**: DAAD EPOS, Deutschlandstipendium, Heinrich Böll, KAS, and Erasmus+ databases.
   - 💶 **Living Cost Calculator**: City-by-city monthly breakdown for Munich, Berlin, Aachen, Karlsruhe, Frankfurt, and Hamburg.
   - 🏠 **Accommodation Guide**: Studierendenwerk dorms, WG-Gesucht shared flats, and private housing portals.
-  - 💼 **Part-Time Jobs**: Working student (Werkstudent) rules, 140 full days allowance, min wage (€12.82/hr), and mini-job cap.
+  - 💼 **Part-Time Jobs**: Working student (Werkstudent) rules, 140 full days allowance, min wage (€13.90/hr), and mini-job cap (€556/mo).
   - 🏥 **Health Insurance**: Techniker Krankenkasse (TK), Barmer/AOK public insurance, and private travel cover.
   - 💱 **Currency & Budget**: Real-time EUR to INR converter tool with historical rates.
   - 🔗 **Official Resources**: Verified government links (DAAD, APS India, Uni-Assist, German Embassy, Make it in Germany).
@@ -173,7 +173,7 @@ Key figures featured in the Germany Hub dataset are verified against official go
 | Metric | Value | Reference / Source |
 |---|---|---|
 | **Blocked Account** | `€11,904 / year (€992 / mo)` | German Federal Foreign Office (Auswärtiges Amt) |
-| **Minimum Wage** | `€12.82 / hour` | German Statutory Minimum Wage Commission (2025) |
+| **Minimum Wage** | `€13.90 / hour` | German Statutory Minimum Wage Commission (2026) |
 | **International Students** | `370,000+` | Federal Statistical Office of Germany (Destatis) |
 | **Public University Tuition** | `€0` (15/16 States) | DAAD Official Database |
 | **Post-Study Work Visa** | `18 Months` | German Residence Act (§ 20 AufenthG) |

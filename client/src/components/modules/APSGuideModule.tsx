@@ -28,29 +28,23 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
       label: 'Processing Fee',
       value: `₹${guide.feeAmount} (${guide.feeCurrency})`,
       icon: CreditCard,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
     },
     {
       label: 'Processing Timeline',
       value: guide.timelineWeeks,
       icon: Clock,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
     },
     {
       label: 'Certificate Validity',
       value: 'Indefinite (Lifetime)',
       icon: ShieldCheck,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
     },
   ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
 
-      {/* ── Section Header (neutral dark navy) ─────────────────────────────── */}
+      {/* ── Section Header (neutral dark navy, matching Visa/Part-Time) ──────── */}
       <div
         className="relative rounded-3xl overflow-hidden"
         style={{
@@ -121,9 +115,9 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
         </div>
       </div>
 
-      {/* ── Key Stats Cards (neutral white) ───────────────────────────────── */}
+      {/* ── Key Stats Cards (neutral white, dark navy text, slate labels) ──── */}
       <div>
-        <h3 className="font-serif font-bold mb-4" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+        <h3 className="font-serif font-bold mb-4" style={{ fontSize: '1.125rem', color: '#0B1220' }}>
           APS Certificate Overview
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -151,13 +145,13 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
                   <span className="text-sm font-semibold font-sans" style={{ color: '#4B5563' }}>
                     {card.label}
                   </span>
-                  <div className={`p-2 rounded-xl ${card.iconBg} group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-5 h-5 ${card.iconColor}`} />
+                  <div className="p-2 rounded-xl bg-slate-100 group-hover:scale-110 transition-transform">
+                    <Icon className="w-5 h-5 text-slate-600" />
                   </div>
                 </div>
                 <p
                   className="font-bold font-sans tracking-tight leading-tight"
-                  style={{ fontSize: '1rem', color: '#0F172A' }}
+                  style={{ fontSize: '1.1rem', color: '#0B1220' }}
                 >
                   {card.value}
                 </p>
@@ -176,7 +170,7 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
           boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
         }}
       >
-        <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+        <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0B1220' }}>
           Step-by-Step APS Application Workflow
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -188,11 +182,11 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
             >
               <div
                 className="w-7 h-7 rounded-xl font-bold text-xs flex items-center justify-center shrink-0 text-white"
-                style={{ background: '#0F172A' }}
+                style={{ background: '#0B1220' }}
               >
                 {idx + 1}
               </div>
-              <p className="text-xs sm:text-sm font-semibold leading-relaxed pt-1" style={{ color: '#0F172A' }}>
+              <p className="text-xs sm:text-sm font-semibold leading-relaxed pt-1" style={{ color: '#0B1220' }}>
                 {step}
               </p>
             </div>
@@ -209,7 +203,7 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
           boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
         }}
       >
-        <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+        <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0B1220' }}>
           Required Documents for APS Application
         </h3>
 
@@ -221,7 +215,7 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
               style={{ background: '#F7F6F3', border: '1px solid rgba(0,0,0,0.06)' }}
             >
               <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: '#2563EB' }} />
-              <span className="text-xs font-semibold" style={{ color: '#0F172A' }}>{doc}</span>
+              <span className="text-xs font-semibold" style={{ color: '#0B1220' }}>{doc}</span>
             </div>
           ))}
         </div>
@@ -237,7 +231,7 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
             boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
           }}
         >
-          <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0F172A' }}>
+          <h3 className="font-serif font-bold mb-5" style={{ fontSize: '1.125rem', color: '#0B1220' }}>
             Frequently Asked Questions about APS
           </h3>
           <div className="space-y-3">
@@ -247,7 +241,7 @@ export default function APSGuideModule({ apsGuides }: { apsGuides: APSGuide[] })
                 className="p-4 rounded-2xl space-y-2"
                 style={{ background: '#F7F6F3', border: '1px solid rgba(0,0,0,0.06)' }}
               >
-                <h4 className="text-sm font-bold flex items-center" style={{ color: '#0F172A' }}>
+                <h4 className="text-sm font-bold flex items-center" style={{ color: '#0B1220' }}>
                   <AlertCircle className="w-4 h-4 mr-2 shrink-0" style={{ color: '#2563EB' }} />
                   {faq.q}
                 </h4>

@@ -64,7 +64,7 @@ async function main() {
             intStudentsCount: '458,210+',
             semesterContrib: '€150 - €400 / semester (Includes Transit Pass)',
             blockedAccountAmt: '€11,904 / year (€992 / month)',
-            minWage: '€12.41 / hour',
+            minWage: '€13.90 / hour',
             publicUnivCount: 300,
             privateUnivCount: 100,
             topCities: JSON.stringify(['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Aachen', 'Karlsruhe']),
@@ -892,9 +892,9 @@ async function main() {
         data: {
             countryId: germany.id,
             allowedHours: '140 full days OR 280 half days per calendar year (Increased from 120/240 in March 2024)',
-            minWage: '€12.41 / hour (Legal statutory minimum wage)',
-            miniJobCap: '€538 / month (Tax-free and social security exempt limit)',
-            taxRules: 'Mini-jobs under €538/month are tax-free. Earnings above €538 require tax class 1 registration, but income tax is refunded via annual tax return.',
+            minWage: '€13.90 / hour (Legal statutory minimum wage as of 2026)',
+            miniJobCap: '€556 / month (Tax-free and social security exempt limit)',
+            taxRules: 'Mini-jobs under €556/month are tax-free. Earnings above €556 require tax class 1 registration, but income tax is refunded via annual tax return.',
             popularJobsJson: JSON.stringify([
                 'Working Student (Werkstudent in IT/Engineering): €14 - €22/hour',
                 'Research / Teaching Assistant (HiWi at University): €13 - €16/hour',

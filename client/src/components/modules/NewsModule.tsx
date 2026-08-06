@@ -23,10 +23,10 @@ export default function NewsModule() {
     },
     {
       id: 3,
-      title: 'Mini-Job Earnings Cap Adjusted to €538/month Tax-Free',
-      date: 'January 2024',
+      title: 'Statutory Minimum Wage Increased to €13.90/hr & Mini-Job Cap to €556/month',
+      date: 'January 2026',
       category: 'Student Finance',
-      summary: 'The tax-free monthly earnings threshold for Mini-jobs has been officially raised to €538/month aligned with statutory minimum wage changes.',
+      summary: 'The statutory minimum wage in Germany is €13.90/hour. The tax-free monthly earnings threshold for Mini-jobs is adjusted to €556/month.',
       source: 'Federal Employment Agency',
     },
   ];

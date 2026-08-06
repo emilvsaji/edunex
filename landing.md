@@ -99,7 +99,7 @@ This document provides an exhaustive specification of the **edunex** web applica
   - Increased card padding (`p-5 sm:p-6`), larger label typography (`text-sm font-semibold`), larger numbers (`text-[1.2rem] font-bold` for key figures), and 20px icon badges.
 - **Verified Germany Data**:
   - Blocked Account: `€11,904 / year (€992 / month)`
-  - Minimum Wage: `€12.82 / hour` (Updated 2025 German statutory rate)
+  - Minimum Wage: `€13.90 / hour` (Updated 2026 German statutory rate)
   - Intl. Student Count: `370,000+` (Verified Destatis figure)
   - Semester Contribution: `€150 – €400 / semester`
 

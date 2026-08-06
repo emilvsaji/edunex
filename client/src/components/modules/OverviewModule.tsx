@@ -31,7 +31,7 @@ function buildCards(country: Country) {
     { label: 'Average Tuition', value: country.avgTuition || '€0 – €3,000 / yr', icon: Euro, color: 'text-teal-500 bg-teal-500/10', isHighlight: true },
     { label: 'Semester Contribution', value: country.semesterContrib || '€150 – €400 / semester', icon: BookOpen, color: 'text-cyan-500 bg-cyan-500/10', isHighlight: false },
     { label: 'Blocked Account', value: country.blockedAccountAmt || '€11,904 / year', icon: PiggyBank, color: 'text-rose-500 bg-rose-500/10', isHighlight: true },
-    { label: 'Minimum Wage', value: country.minWage || '€12.82 / hour', icon: Briefcase, color: 'text-orange-500 bg-orange-500/10', isHighlight: true },
+    { label: 'Minimum Wage', value: country.minWage || '€13.90 / hour', icon: Briefcase, color: 'text-orange-500 bg-orange-500/10', isHighlight: true },
     { label: 'Avg. Living Cost', value: country.avgLivingCost || '€934 – €1,100 / month', icon: Building2, color: 'text-sky-500 bg-sky-500/10', isHighlight: true },
     { label: 'Public Universities', value: `${country.publicUnivCount || 300}+`, icon: Building, color: 'text-emerald-500 bg-emerald-500/10', isHighlight: false },
     { label: 'Private Universities', value: `${country.privateUnivCount || 100}+`, icon: Building2, color: 'text-violet-500 bg-violet-500/10', isHighlight: false },
