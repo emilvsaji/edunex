@@ -84,3 +84,5 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
+# Project Documentation Specs (Ignored)
+document.md
