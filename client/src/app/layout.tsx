@@ -24,17 +24,21 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://edunex.io'),
+  metadataBase: new URL('https://edunex-production.vercel.app'),
   title: 'edunex — All-in-One Study Abroad Planning Platform',
   description:
-    'Comprehensive study abroad planning platform for Germany and international destinations. Complete official information, universities, admission requirements, APS certification guides, student visa roadmaps, blocked accounts, scholarships, living costs, accommodation, part-time jobs, and health insurance.',
+    'Comprehensive study abroad planning platform for Germany, Austria, and international destinations. Complete official information, universities, admission requirements, APS certification guides, student visa roadmaps, blocked accounts, scholarships, living costs, accommodation, part-time jobs, and health insurance.',
   keywords: [
     'Study in Germany',
+    'Study in Austria',
     'Germany Universities',
+    'Austria Universities',
     'APS Certificate India',
     'German Student Visa',
+    'Austrian Student Visa',
     'Blocked Account Sperrkonto',
     'DAAD Scholarships',
+    'OeAD Scholarships',
     'Study Abroad Platform',
   ],
   authors: [{ name: 'edunex Team' }],
@@ -47,8 +51,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'edunex — All-in-One Study Abroad Planning Platform',
-    description: 'Master every stage of your study abroad journey. Tuition-free Germany guide, APS, Visa, Blocked Account, & Universities database.',
-    url: 'https://edunex.io',
+    description: 'Master every stage of your study abroad journey. Tuition-free Germany guide, Austria guide, APS, Visa, Blocked Account, & Universities database.',
+    url: 'https://edunex-production.vercel.app',
     siteName: 'edunex',
     images: [
       {
