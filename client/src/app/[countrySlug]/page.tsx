@@ -87,7 +87,13 @@ function DestinationDashboardContent() {
       case 'overview':
         return <OverviewModule country={country} />;
       case 'universities':
-        return <UniversitiesModule universities={country.universities || []} />;
+        return (
+          <UniversitiesModule
+            universities={country.universities || []}
+            countrySlug={countrySlug}
+            countryName={country.name}
+          />
+        );
       case 'admission-requirements':
         return <AdmissionRequirementsModule requirements={country.requirements || []} />;
       case 'documents':

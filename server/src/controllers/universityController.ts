@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
+import { GeminiService } from '../services/geminiService';
 
 export const getUniversities = async (req: Request, res: Response) => {
   try {
@@ -40,7 +41,7 @@ export const getUniversities = async (req: Request, res: Response) => {
       orderByClause = { name: sortOrder === 'desc' ? 'desc' : 'asc' };
     }
 
-    const universities = await prisma.university.findMany({
+    let universities: any[] = await prisma.university.findMany({
       where: whereClause,
       include: {
         requirements: true,
@@ -48,6 +49,15 @@ export const getUniversities = async (req: Request, res: Response) => {
       },
       orderBy: orderByClause,
     });
+
+    // If search term is provided and no local database results match, trigger Gemini fallback
+    if (search && universities.length === 0 && countrySlug) {
+      const countryTarget = String(countrySlug);
+      const aiResults = await GeminiService.searchUniversities(countryTarget, String(search));
+      if (aiResults.length > 0) {
+        universities = aiResults;
+      }
+    }
 
     return res.json({ success: true, count: universities.length, data: universities });
   } catch (error: any) {

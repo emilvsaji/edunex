@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
+import { GeminiService } from '../services/geminiService';
 
 export const globalSearch = async (req: Request, res: Response) => {
   try {
     const query = String(req.query.q || '').trim();
+    const country = req.query.country ? String(req.query.country) : 'Germany and Austria';
+
     if (!query || query.length < 2) {
       return res.json({
         success: true,
@@ -71,10 +74,18 @@ export const globalSearch = async (req: Request, res: Response) => {
       }),
     ]);
 
+    let finalUniversities: any[] = universities;
+    if (finalUniversities.length === 0) {
+      const aiUnis = await GeminiService.searchUniversities(country, query);
+      if (aiUnis.length > 0) {
+        finalUniversities = aiUnis;
+      }
+    }
+
     return res.json({
       success: true,
       data: {
-        universities,
+        universities: finalUniversities,
         scholarships,
         documents,
         faqs,

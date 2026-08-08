@@ -49,12 +49,12 @@ export const universityService = {
       const res = await api.get('/universities', { params });
       return res.data.data;
     } catch (err) {
-      const germany = getFallbackGermanyData();
-      let list = germany.universities || [];
+      const countryData = params?.countrySlug === 'austria' ? getFallbackAustriaData() : getFallbackGermanyData();
+      let list = countryData.universities || [];
 
       if (params?.search) {
         const q = String(params.search).toLowerCase();
-        list = list.filter(u => u.name.toLowerCase().includes(q) || u.cityName.toLowerCase().includes(q));
+        list = list.filter(u => u.name.toLowerCase().includes(q) || u.cityName.toLowerCase().includes(q) || u.description.toLowerCase().includes(q));
       }
       if (params?.city && params.city !== 'All') {
         list = list.filter(u => u.cityName === params.city);
@@ -69,6 +69,18 @@ export const universityService = {
         list = [...list].sort((a, b) => (params.sortOrder === 'desc' ? b.qsRanking - a.qsRanking : a.qsRanking - b.qsRanking));
       }
       return list;
+    }
+  },
+  search: async (countrySlug: string, query: string): Promise<University[]> => {
+    try {
+      const res = await api.get('/universities', { params: { countrySlug, search: query } });
+      return res.data.data;
+    } catch (err) {
+      const countryData = countrySlug === 'austria' ? getFallbackAustriaData() : getFallbackGermanyData();
+      const q = query.toLowerCase();
+      return (countryData.universities || []).filter(
+        u => u.name.toLowerCase().includes(q) || u.cityName.toLowerCase().includes(q) || u.description.toLowerCase().includes(q)
+      );
     }
   },
 };

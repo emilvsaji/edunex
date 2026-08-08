@@ -58,11 +58,11 @@ export interface City {
 
 export interface University {
   id: string;
-  countryId: string;
+  countryId?: string;
   cityId?: string;
   name: string;
   slug: string;
-  type: 'Public' | 'Private';
+  type: 'Public' | 'Private' | string;
   qsRanking: number;
   cityName: string;
   logoUrl?: string;
@@ -75,6 +75,8 @@ export interface University {
   degrees: string;
   description: string;
   requirements?: AdmissionRequirement[];
+  isAiGenerated?: boolean;
+  aiSourceNote?: string;
 }
 
 export interface AdmissionRequirement {

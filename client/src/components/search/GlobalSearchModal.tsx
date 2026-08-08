@@ -128,11 +128,18 @@ export default function GlobalSearchModal({ isOpen, onClose }: Props) {
                         className="flex items-center justify-between p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition-colors group"
                       >
                         <div>
-                          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-brand-500 transition-colors">
-                            {u.name}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-brand-500 transition-colors">
+                              {u.name}
+                            </p>
+                            {u.isAiGenerated && (
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                                ✨ AI Sourced
+                              </span>
+                            )}
+                          </div>
                           <p className="text-xs text-zinc-400">
-                            {u.cityName} • QS #{u.qsRanking} • {u.type}
+                            {u.cityName} • QS #{u.qsRanking || '800+'} • {u.type}
                           </p>
                         </div>
                         <ExternalLink className="w-4 h-4 text-zinc-400 group-hover:text-brand-500 transition-colors" />

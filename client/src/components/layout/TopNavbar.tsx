@@ -21,12 +21,12 @@ interface Props {
 }
 
 const POPULAR_DESTINATIONS = [
-  { slug: 'germany',   name: 'Germany',        flag: '🇩🇪', available: false },
+  { slug: 'germany',   name: 'Germany',        flag: '🇩🇪', available: true  },
+  { slug: 'austria',   name: 'Austria',        flag: '🇦🇹', available: true  },
   { slug: 'uk',        name: 'United Kingdom', flag: '🇬🇧', available: false },
   { slug: 'usa',       name: 'United States',  flag: '🇺🇸', available: false },
   { slug: 'canada',    name: 'Canada',         flag: '🇨🇦', available: false },
   { slug: 'australia', name: 'Australia',      flag: '🇦🇺', available: false },
-  { slug: 'france',    name: 'France',         flag: '🇫🇷', available: false },
 ];
 
 const EUROPE_DESTINATIONS = [
@@ -160,12 +160,29 @@ export default function TopNavbar({ countryName, activeModuleLabel }: Props) {
                           Popular Study Destinations
                         </p>
                         <div className="space-y-1">
-                          {POPULAR_DESTINATIONS.map((c) => (
-                            <div key={c.slug} className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm text-slate-400 opacity-60">
-                              <span>{c.flag}</span>
-                              <span>{c.name}</span>
-                            </div>
-                          ))}
+                          {POPULAR_DESTINATIONS.map((c) =>
+                            c.available ? (
+                              <Link
+                                key={c.slug}
+                                href={`/${c.slug}`}
+                                onClick={() => setCountriesOpen(false)}
+                                className="flex items-center justify-between py-1.5 px-2 rounded-lg text-sm font-semibold text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                              >
+                                <span className="flex items-center gap-2">
+                                  <span>{c.flag}</span>
+                                  <span>{c.name}</span>
+                                </span>
+                                <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">
+                                  Live
+                                </span>
+                              </Link>
+                            ) : (
+                              <div key={c.slug} className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm text-slate-400 opacity-50">
+                                <span>{c.flag}</span>
+                                <span>{c.name}</span>
+                              </div>
+                            )
+                          )}
                         </div>
                       </div>
                       <div className="hidden sm:block w-px bg-slate-200" />
