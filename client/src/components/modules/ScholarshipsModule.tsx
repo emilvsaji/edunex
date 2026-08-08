@@ -12,22 +12,30 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export default function ScholarshipsModule({ scholarships }: { scholarships: Scholarship[] }) {
+interface Props {
+  scholarships: Scholarship[];
+  countryName?: string;
+}
+
+export default function ScholarshipsModule({ scholarships, countryName }: Props) {
   const [search, setSearch] = useState('');
   const [selectedProvider, setSelectedProvider] = useState('All');
 
-  const providers = ['All', 'DAAD', 'Government', 'University', 'Private'];
+  const providers = useMemo(() => {
+    const set = new Set<string>();
+    scholarships.forEach((s) => set.add(s.providerType));
+    return ['All', ...Array.from(set)];
+  }, [scholarships]);
 
   const filteredScholarships = useMemo(() => {
     return scholarships.filter((s) => {
+      if (selectedProvider !== 'All' && s.providerType !== selectedProvider) return false;
       if (search) {
         const q = search.toLowerCase();
-        if (!s.title.toLowerCase().includes(q) && !s.description.toLowerCase().includes(q)) {
-          return false;
-        }
-      }
-      if (selectedProvider !== 'All' && s.providerType !== selectedProvider) {
-        return false;
+        const matchTitle = s.title.toLowerCase().includes(q);
+        const matchDesc = s.description.toLowerCase().includes(q);
+        const matchElig = s.eligibility.toLowerCase().includes(q);
+        if (!matchTitle && !matchDesc && !matchElig) return false;
       }
       return true;
     });
@@ -44,7 +52,7 @@ export default function ScholarshipsModule({ scholarships }: { scholarships: Sch
               Scholarships & Grants Database
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Search government, DAAD, university, and foundation funding opportunities in Germany.
+              Search government, institutional, university, and foundation funding opportunities{countryName ? ` in ${countryName}` : ''}.
             </p>
           </div>
 

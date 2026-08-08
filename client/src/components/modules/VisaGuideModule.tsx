@@ -10,53 +10,58 @@ import {
   ExternalLink,
   AlertOctagon,
   ShieldCheck,
+  Banknote,
 } from 'lucide-react';
 
-export default function VisaGuideModule({ visas }: { visas: VisaInfo[] }) {
+interface Props {
+  visas: VisaInfo[];
+  countryName?: string;
+}
+
+export default function VisaGuideModule({ visas, countryName }: Props) {
   const visa = visas[0];
 
   if (!visa) {
-    return <div className="p-8 text-center text-zinc-400">Visa data loading...</div>;
+    return <div className="p-8 text-center text-zinc-400">Visa information is loading...</div>;
   }
 
   const steps: string[] = visa.stepsJson ? JSON.parse(visa.stepsJson) : [];
   const docs: string[] = visa.requiredDocsJson ? JSON.parse(visa.requiredDocsJson) : [];
   const rejectionReasons: string[] = visa.rejectionReasonsJson ? JSON.parse(visa.rejectionReasonsJson) : [];
 
-  // ── Neutral stat cards matching OverviewModule style ────────────────────────
   const statCards = [
     {
-      label: 'Visa Application Fee',
-      value: visa.feeAmount,
-      icon: CreditCard,
-      iconColor: 'text-slate-600',
-      iconBg: 'bg-slate-100',
+      label: 'Visa Type',
+      value: visa.visaType,
+      icon: ShieldCheck,
+      iconBg: 'bg-emerald-50 text-emerald-600',
+      iconColor: 'text-emerald-600',
     },
     {
-      label: 'Processing Time',
+      label: 'Processing Fee',
+      value: visa.feeAmount,
+      icon: Banknote,
+      iconBg: 'bg-amber-50 text-amber-600',
+      iconColor: 'text-amber-600',
+    },
+    {
+      label: 'Processing Timeline',
       value: visa.processingTimeWeeks,
       icon: Clock,
-      iconColor: 'text-slate-600',
-      iconBg: 'bg-slate-100',
-    },
-    {
-      label: 'Biometrics Required',
-      value: visa.biometricsInfo,
-      icon: Fingerprint,
-      iconColor: 'text-slate-600',
-      iconBg: 'bg-slate-100',
+      iconBg: 'bg-blue-50 text-blue-600',
+      iconColor: 'text-blue-600',
     },
   ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-
-      {/* ── Section Header (neutral, matching Overview style) ───────────────── */}
+      {/* ── Editorial Hero Banner (solid navy #0B1220 matching Overview & TopNavbar) ── */}
       <div
         className="relative rounded-3xl overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0B1220 0%, #1E293B 60%, #0F172A 100%)',
-          boxShadow: '0 8px 40px rgba(11,18,32,0.28)',
+          background: 'linear-gradient(135deg, #0B1220 0%, #0F1D36 60%, #0B1220 100%)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 8px 32px rgba(11,18,32,0.18)',
         }}
       >
         {/* Subtle texture overlay */}
@@ -78,7 +83,7 @@ export default function VisaGuideModule({ visas }: { visas: VisaInfo[] }) {
             }}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Official German Student Visa Guide</span>
+            <span>Official {countryName || 'National'} Student Visa Guide</span>
           </div>
           <h2
             className="font-serif font-bold text-white mb-3"
@@ -90,16 +95,16 @@ export default function VisaGuideModule({ visas }: { visas: VisaInfo[] }) {
             className="font-sans leading-relaxed max-w-2xl mb-6"
             style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.9375rem' }}
           >
-            Complete roadmap for obtaining your German National Student Visa (Category D) via VFS Global.
+            Complete roadmap for obtaining your {countryName ? `${countryName} Student Visa & Residence Permit` : 'National Student Visa'} via official consular channels.
           </p>
           <a
             href={visa.embassyPortalUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center px-5 py-2.5 rounded-full font-bold text-xs transition-all"
+            className="inline-flex items-center px-5 py-2.5 rounded-full font-bold text-xs transition-all hover:scale-105"
             style={{ background: '#FFFFFF', color: '#0B1220' }}
           >
-            German Embassy Visa Portal <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+            {countryName ? `${countryName} Embassy Portal` : 'Official Embassy Visa Portal'} <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
           </a>
         </div>
       </div>

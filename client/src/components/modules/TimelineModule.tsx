@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TimelineStep } from '@/types';
 import {
   Calendar,
@@ -30,11 +30,25 @@ const iconMap: Record<string, any> = {
   MapPin,
 };
 
-export default function TimelineModule({ timelines }: { timelines: TimelineStep[] }) {
+interface Props {
+  timelines: TimelineStep[];
+  countryName?: string;
+}
+
+export default function TimelineModule({ timelines, countryName }: Props) {
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
 
+  useEffect(() => {
+    const saved = localStorage.getItem('edunex_timeline_steps');
+    if (saved) {
+      try { setCompletedSteps(JSON.parse(saved)); } catch (e) {}
+    }
+  }, []);
+
   const toggleStep = (id: string) => {
-    setCompletedSteps((prev) => ({ ...prev, [id]: !prev[id] }));
+    const updated = { ...completedSteps, [id]: !completedSteps[id] };
+    setCompletedSteps(updated);
+    localStorage.setItem('edunex_timeline_steps', JSON.stringify(updated));
   };
 
   const sortedTimelines = [...timelines].sort((a, b) => a.order - b.order);
@@ -49,7 +63,7 @@ export default function TimelineModule({ timelines }: { timelines: TimelineStep[
             12-Month Interactive Application Roadmap
           </h2>
           <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Visual milestone checklist from university shortlisting to arriving in Germany.
+            Visual milestone checklist from university shortlisting to arriving in {countryName || 'your destination'}.
           </p>
         </div>
 

@@ -13,7 +13,12 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export default function DocumentChecklistModule({ documents }: { documents: DocumentItem[] }) {
+interface Props {
+  documents: DocumentItem[];
+  countryName?: string;
+}
+
+export default function DocumentChecklistModule({ documents, countryName }: Props) {
   const [checkedIds, setCheckedIds] = useState<Record<string, boolean>>({});
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -30,7 +35,15 @@ export default function DocumentChecklistModule({ documents }: { documents: Docu
     localStorage.setItem('edunex_doc_checklist', JSON.stringify(updated));
   };
 
-  const categories = ['All', 'APS', 'University Application', 'Visa', 'Financial'];
+  // Derive categories dynamically from documents (APS only appears if country has APS documents)
+  const categories = React.useMemo(() => {
+    const set = new Set<string>();
+    documents.forEach((d) => {
+      if (d.category) set.add(d.category);
+      if (d.stage) set.add(d.stage);
+    });
+    return ['All', ...Array.from(set)];
+  }, [documents]);
 
   const filteredDocs = documents.filter((doc) => {
     if (activeCategory === 'All') return true;
@@ -51,7 +64,7 @@ export default function DocumentChecklistModule({ documents }: { documents: Docu
               Interactive Document Checklist
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Track mandatory documents for APS, University Application, and Visa processing.
+              Track mandatory academic, financial, visa, and enrollment documents{countryName ? ` for ${countryName}` : ''}.
             </p>
           </div>
 

@@ -14,7 +14,12 @@ import {
   Globe,
 } from 'lucide-react';
 
-export default function AdmissionRequirementsModule({ requirements }: { requirements: AdmissionRequirement[] }) {
+interface Props {
+  requirements: AdmissionRequirement[];
+  countryName?: string;
+}
+
+export default function AdmissionRequirementsModule({ requirements, countryName }: Props) {
   const [activeTab, setActiveTab] = useState<'Bachelor' | 'Master' | 'PhD'>('Master');
 
   const currentReqs = requirements.filter((r) => r.degreeLevel === activeTab);
@@ -29,7 +34,7 @@ export default function AdmissionRequirementsModule({ requirements }: { requirem
             Admission Requirements Matrix
           </h2>
           <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Exact academic, language, and credential requirements per degree level in Germany.
+            Exact academic, language, and credential requirements per degree level{countryName ? ` in ${countryName}` : ''}.
           </p>
         </div>
 
@@ -68,12 +73,20 @@ export default function AdmissionRequirementsModule({ requirements }: { requirem
                   <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                     {req.degreeLevel} Admission Criteria
                   </h3>
-                  <p className="text-xs text-zinc-500">Official German Education Standard (Anabin H+ Verification)</p>
+                  <p className="text-xs text-zinc-500">
+                    {countryName ? `Accredited ${countryName} Higher Education Standard` : 'Official Higher Education Qualification Standard'}
+                  </p>
                 </div>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
-                APS Certification Mandatory
-              </span>
+              {req.apsRequired ? (
+                <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
+                  APS Certification Mandatory
+                </span>
+              ) : (
+                <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold border border-blue-500/20">
+                  Direct University Evaluation
+                </span>
+              )}
             </div>
 
             {/* Criteria Grid */}

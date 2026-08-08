@@ -5,57 +5,62 @@ import { PartTimeJobInfo } from '@/types';
 import {
   Briefcase,
   Clock,
-  Euro,
+  Banknote,
+  TrendingUp,
   ShieldCheck,
   CheckCircle2,
+  Euro,
 } from 'lucide-react';
 
-export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: PartTimeJobInfo[] }) {
+interface Props {
+  partTimeJobs: PartTimeJobInfo[];
+  countryName?: string;
+}
+
+export default function PartTimeJobsModule({ partTimeJobs, countryName }: Props) {
   const jobInfo = partTimeJobs[0];
 
   if (!jobInfo) {
-    return <div className="p-8 text-center text-zinc-400">Job rules data loading...</div>;
+    return <div className="p-8 text-center text-zinc-400">Job information is loading...</div>;
   }
 
   const popularJobs: string[] = jobInfo.popularJobsJson ? JSON.parse(jobInfo.popularJobsJson) : [];
+  const portals: string[] = jobInfo.jobPortalsJson ? JSON.parse(jobInfo.jobPortalsJson) : [];
 
-  // ── Neutral stat cards matching OverviewModule style ────────────────────────
   const statCards = [
     {
-      label: 'Allowed Work Limit',
+      label: 'Allowed Working Hours',
       value: jobInfo.allowedHours,
       icon: Clock,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
-      isHighlight: false,
+      iconBg: 'bg-emerald-50 text-emerald-600',
+      iconColor: 'text-emerald-600',
     },
     {
-      label: 'Statutory Minimum Wage',
+      label: 'Minimum / Typical Wage',
       value: jobInfo.minWage,
-      icon: Euro,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
-      isHighlight: true,
+      icon: Banknote,
+      iconBg: 'bg-blue-50 text-blue-600',
+      iconColor: 'text-blue-600',
     },
     {
-      label: 'Tax-Free Mini-Job Cap',
+      label: 'Marginal Earnings Cap',
       value: jobInfo.miniJobCap,
-      icon: ShieldCheck,
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
-      isHighlight: true,
+      icon: TrendingUp,
+      iconBg: 'bg-amber-50 text-amber-600',
+      iconColor: 'text-amber-600',
     },
   ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
 
-      {/* ── Section Header (neutral dark navy, matching Overview/Visa style) ── */}
+      {/* ── Editorial Hero Banner (solid navy #0B1220 matching Overview & TopNavbar) ── */}
       <div
         className="relative rounded-3xl overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0B1220 0%, #1E293B 60%, #0F172A 100%)',
-          boxShadow: '0 8px 40px rgba(11,18,32,0.28)',
+          background: 'linear-gradient(135deg, #0B1220 0%, #0F1D36 60%, #0B1220 100%)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 8px 32px rgba(11,18,32,0.18)',
         }}
       >
         <div
@@ -76,7 +81,7 @@ export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: Par
             }}
           >
             <Briefcase className="w-3.5 h-3.5" />
-            <span>German Student Labor Law Guidelines</span>
+            <span>{countryName ? `${countryName} Student Labor Law Guidelines` : 'Student Labor Law Guidelines'}</span>
           </div>
           <h2
             className="font-serif font-bold text-white mb-3"
@@ -88,7 +93,7 @@ export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: Par
             className="font-sans leading-relaxed max-w-2xl"
             style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.9375rem' }}
           >
-            Everything international students need to know about working limits, tax rules, and earning options in Germany.
+            Everything international students need to know about working limits, tax rules, and earning options{countryName ? ` in ${countryName}` : ''}.
           </p>
         </div>
       </div>
@@ -130,7 +135,7 @@ export default function PartTimeJobsModule({ partTimeJobs }: { partTimeJobs: Par
                 <p
                   className="font-bold font-sans tracking-tight leading-tight"
                   style={{
-                    fontSize: card.isHighlight ? '1.15rem' : '0.9rem',
+                    fontSize: '1rem',
                     color: '#0F172A',
                   }}
                 >

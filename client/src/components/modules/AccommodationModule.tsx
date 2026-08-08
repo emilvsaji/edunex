@@ -12,7 +12,12 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
-export default function AccommodationModule({ accommodations }: { accommodations: AccommodationOption[] }) {
+interface Props {
+  accommodations: AccommodationOption[];
+  countryName?: string;
+}
+
+export default function AccommodationModule({ accommodations, countryName }: Props) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
@@ -22,7 +27,7 @@ export default function AccommodationModule({ accommodations }: { accommodations
           Student Accommodation Options
         </h2>
         <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-          Detailed breakdown of Student Dorms vs WG Shared Flats vs Private Apartments in Germany.
+          Detailed breakdown of Student Dorms vs Shared Flats (WG) vs Private Apartments{countryName ? ` in ${countryName}` : ''}.
         </p>
       </div>
 

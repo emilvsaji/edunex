@@ -11,10 +11,19 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export default function FAQModule({ faqs }: { faqs: FAQItem[] }) {
+interface Props {
+  faqs: FAQItem[];
+  countryName?: string;
+}
+
+export default function FAQModule({ faqs, countryName }: Props) {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [openIds, setOpenIds] = useState<Record<string, boolean>>({ [faqs[0]?.id || '']: true });
+  const [openIds, setOpenIds] = useState<Record<string, boolean>>({});
+
+  const toggleAccordion = (id: string) => {
+    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -22,21 +31,15 @@ export default function FAQModule({ faqs }: { faqs: FAQItem[] }) {
     return ['All', ...Array.from(set)];
   }, [faqs]);
 
-  const toggleAccordion = (id: string) => {
-    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
   const filteredFaqs = useMemo(() => {
     return faqs.filter((f) => {
+      if (selectedCategory !== 'All' && f.category !== selectedCategory) return false;
       if (search) {
         const q = search.toLowerCase();
         const matchQ = f.question.toLowerCase().includes(q);
         const matchA = f.answer.toLowerCase().includes(q);
-        const matchTag = f.tags ? f.tags.toLowerCase().includes(q) : false;
-        if (!matchQ && !matchA && !matchTag) return false;
-      }
-      if (selectedCategory !== 'All' && f.category !== selectedCategory) {
-        return false;
+        const matchT = f.tags?.toLowerCase().includes(q);
+        if (!matchQ && !matchA && !matchT) return false;
       }
       return true;
     });
@@ -53,7 +56,7 @@ export default function FAQModule({ faqs }: { faqs: FAQItem[] }) {
               Frequently Asked Questions Hub
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Search answers regarding Germany admissions, blocked accounts, visas, and jobs.
+              Search answers regarding {countryName ? `${countryName} admissions, visas, costs, and student life` : 'admissions, visas, and student life'}.
             </p>
           </div>
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { currencyService } from '@/services/api';
-import { CurrencyData } from '@/types';
+import { CurrencyData, Country } from '@/types';
 import {
   Euro,
   ArrowRightLeft,
@@ -12,12 +12,21 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
-export default function CurrencyModule() {
+interface Props {
+  countryName?: string;
+  country?: Country;
+}
+
+export default function CurrencyModule({ countryName, country }: Props) {
+  const isAustria = country?.slug === 'austria' || countryName?.toLowerCase() === 'austria';
+  const defaultLivingFunds = isAustria ? 10471 : 11904;
+  const defaultTuition = isAustria ? 1453 : 700;
+
   const [data, setData] = useState<CurrencyData | null>(null);
   const [eurInput, setEurInput] = useState<number>(1000);
   const [inrInput, setInrInput] = useState<number>(91250);
-  const [blockedAmtEur, setBlockedAmtEur] = useState<number>(11904);
-  const [tuitionAmtEur, setTuitionAmtEur] = useState<number>(1500);
+  const [blockedAmtEur, setBlockedAmtEur] = useState<number>(defaultLivingFunds);
+  const [tuitionAmtEur, setTuitionAmtEur] = useState<number>(defaultTuition);
 
   useEffect(() => {
     currencyService.getRate().then((res) => {
@@ -264,14 +273,16 @@ export default function CurrencyModule() {
       >
         <h3 className="font-serif font-bold flex items-center" style={{ fontSize: '1.125rem', color: '#0B1220' }}>
           <PiggyBank className="w-5 h-5 text-slate-600 mr-2" />
-          Annual Total Budget Planner (Germany)
+          Annual Total Budget Planner{countryName ? ` (${countryName})` : ''}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
               <label className="text-xs font-semibold block mb-1" style={{ color: '#4B5563' }}>
-                Blocked Account (€11,904 standard)
+                {isAustria
+                  ? 'Proof of Financial Means / Living Fund Estimate (€8,671–€15,700/yr)'
+                  : 'Blocked Account (€11,904 standard Sperrkonto)'}
               </label>
               <input
                 type="number"

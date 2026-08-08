@@ -12,7 +12,12 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-export default function OfficialResourcesModule({ resources }: { resources: OfficialResource[] }) {
+interface Props {
+  resources: OfficialResource[];
+  countryName?: string;
+}
+
+export default function OfficialResourcesModule({ resources, countryName }: Props) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
@@ -22,7 +27,7 @@ export default function OfficialResourcesModule({ resources }: { resources: Offi
           Verified Official Resources & Portals
         </h2>
         <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-          Direct links to verified German governmental, academic, and administrative portals.
+          Direct links to verified governmental, academic, and administrative portals{countryName ? ` in ${countryName}` : ''}.
         </p>
       </div>
 

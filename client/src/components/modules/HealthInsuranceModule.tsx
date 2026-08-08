@@ -10,7 +10,12 @@ import {
   HeartPulse,
 } from 'lucide-react';
 
-export default function HealthInsuranceModule({ insurances }: { insurances: InsuranceOption[] }) {
+interface Props {
+  insurances: InsuranceOption[];
+  countryName?: string;
+}
+
+export default function HealthInsuranceModule({ insurances, countryName }: Props) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
@@ -20,7 +25,7 @@ export default function HealthInsuranceModule({ insurances }: { insurances: Insu
           Health Insurance Guide & Comparison
         </h2>
         <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-          Statutory Public Insurance (TK / Barmer / AOK) vs Private Travel/Student Insurance in Germany.
+          Statutory Public Insurance vs Private Travel/Student Insurance options{countryName ? ` in ${countryName}` : ''}.
         </p>
       </div>
 

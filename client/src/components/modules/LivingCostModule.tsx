@@ -14,16 +14,31 @@ import {
   MapPin,
   Euro,
   Info,
+  ShoppingBag,
+  Train,
+  Coffee,
 } from 'lucide-react';
 
-export default function LivingCostModule({ livingCosts }: { livingCosts: LivingCostCity[] }) {
-  const [selectedCity, setSelectedCity] = useState<LivingCostCity>(livingCosts[0]);
-  const [customRent, setCustomRent] = useState<number>(selectedCity?.rent || 500);
-  const [customFood, setCustomFood] = useState<number>(selectedCity?.food || 220);
-  const [customTransport, setCustomTransport] = useState<number>(selectedCity?.transport || 49);
-  const [customUtilities, setCustomUtilities] = useState<number>(selectedCity?.utilities || 90);
-  const [customInternet, setCustomInternet] = useState<number>(selectedCity?.internet || 30);
-  const [customEntertainment, setCustomEntertainment] = useState<number>(selectedCity?.entertainment || 100);
+interface Props {
+  livingCosts: LivingCostCity[];
+  countryName?: string;
+}
+
+export default function LivingCostModule({ livingCosts, countryName }: Props) {
+  const [selectedCity, setSelectedCity] = useState<string>(livingCosts[0]?.cityName || 'Vienna');
+
+  const currentCity = livingCosts.find((c) => c.cityName === selectedCity) || livingCosts[0];
+
+  const [customRent, setCustomRent] = useState<number>(currentCity?.rent || 500);
+  const [customFood, setCustomFood] = useState<number>(currentCity?.food || 220);
+  const [customTransport, setCustomTransport] = useState<number>(currentCity?.transport || 49);
+  const [customUtilities, setCustomUtilities] = useState<number>(currentCity?.utilities || 90);
+  const [customInternet, setCustomInternet] = useState<number>(currentCity?.internet || 30);
+  const [customEntertainment, setCustomEntertainment] = useState<number>(currentCity?.entertainment || 100);
+
+  if (!currentCity) {
+    return <div className="p-8 text-center text-zinc-400">Living cost data loading...</div>;
+  }
 
   const calculateCustomTotal = () => {
     return customRent + customFood + customTransport + customUtilities + customInternet + customEntertainment;
@@ -39,7 +54,7 @@ export default function LivingCostModule({ livingCosts }: { livingCosts: LivingC
             Living Cost City Estimator
           </h2>
           <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Itemized monthly expense comparison across major German university cities.
+            Itemized monthly expense comparison across major {countryName || 'university'} cities.
           </p>
         </div>
       </div>
@@ -65,12 +80,12 @@ export default function LivingCostModule({ livingCosts }: { livingCosts: LivingC
       {/* City Comparison Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {livingCosts.map((lc) => {
-          const isSelected = selectedCity?.id === lc.id;
+          const isSelected = currentCity?.id === lc.id || selectedCity === lc.cityName;
           return (
             <div
               key={lc.id}
               onClick={() => {
-                setSelectedCity(lc);
+                setSelectedCity(lc.cityName);
                 setCustomRent(lc.rent);
                 setCustomFood(lc.food);
                 setCustomTransport(lc.transport);
@@ -115,7 +130,7 @@ export default function LivingCostModule({ livingCosts }: { livingCosts: LivingC
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/80 pb-4">
             <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center">
               <Calculator className="w-5 h-5 text-sky-500 mr-2" />
-              Interactive Monthly Expense Simulator ({selectedCity.cityName})
+              Interactive Monthly Expense Simulator ({selectedCity})
             </h3>
             <div className="text-right">
               <span className="text-xs text-zinc-400">Simulated Monthly Total</span>

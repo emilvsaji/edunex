@@ -95,31 +95,31 @@ function DestinationDashboardContent() {
           />
         );
       case 'admission-requirements':
-        return <AdmissionRequirementsModule requirements={country.requirements || []} />;
+        return <AdmissionRequirementsModule requirements={country.requirements || []} countryName={country.name} />;
       case 'documents':
-        return <DocumentChecklistModule documents={country.documents || []} />;
+        return <DocumentChecklistModule documents={country.documents || []} countryName={country.name} />;
       case 'aps':
         return <APSGuideModule apsGuides={country.apsGuides || []} />;
       case 'visa':
-        return <VisaGuideModule visas={country.visas || []} />;
+        return <VisaGuideModule visas={country.visas || []} countryName={country.name} />;
       case 'timeline':
-        return <TimelineModule timelines={country.timelines || []} />;
+        return <TimelineModule timelines={country.timelines || []} countryName={country.name} />;
       case 'scholarships':
-        return <ScholarshipsModule scholarships={country.scholarships || []} />;
+        return <ScholarshipsModule scholarships={country.scholarships || []} countryName={country.name} />;
       case 'living-cost':
-        return <LivingCostModule livingCosts={country.livingCosts || []} />;
+        return <LivingCostModule livingCosts={country.livingCosts || []} countryName={country.name} />;
       case 'accommodation':
-        return <AccommodationModule accommodations={country.accommodations || []} />;
+        return <AccommodationModule accommodations={country.accommodations || []} countryName={country.name} />;
       case 'jobs':
-        return <PartTimeJobsModule partTimeJobs={country.partTimeJobs || []} />;
+        return <PartTimeJobsModule partTimeJobs={country.partTimeJobs || []} countryName={country.name} />;
       case 'insurance':
-        return <HealthInsuranceModule insurances={country.insurances || []} />;
+        return <HealthInsuranceModule insurances={country.insurances || []} countryName={country.name} />;
       case 'currency':
-        return <CurrencyModule />;
+        return <CurrencyModule countryName={country.name} country={country} />;
       case 'resources':
-        return <OfficialResourcesModule resources={country.officialResources || []} />;
+        return <OfficialResourcesModule resources={country.officialResources || []} countryName={country.name} />;
       case 'faq':
-        return <FAQModule faqs={country.faqs || []} />;
+        return <FAQModule faqs={country.faqs || []} countryName={country.name} />;
       default:
         return <OverviewModule country={country} />;
     }
