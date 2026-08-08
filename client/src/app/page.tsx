@@ -34,6 +34,19 @@ const DEST_CARDS = [
     tags: ['Engineering', 'Medicine', 'Computer Sci'],
   },
   {
+    slug: 'austria',
+    title: 'Study in Austria',
+    flag: '🇦🇹',
+    image: '/images/dest_austria.png',
+    available: true,
+    stats: [
+      { icon: DollarSign, label: '€726/sem' },
+      { icon: Building2, label: '36+ unis' },
+      { icon: Briefcase, label: 'No APS Req.' },
+    ],
+    tags: ['Computer Science', 'Business', 'Arts & Music'],
+  },
+  {
     slug: 'uk',
     title: 'Study in United Kingdom',
     flag: '🇬🇧',

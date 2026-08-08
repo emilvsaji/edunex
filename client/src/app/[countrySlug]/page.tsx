@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { countryService, getFallbackGermanyData } from '@/services/api';
+import { countryService, getFallbackGermanyData, getFallbackAustriaData } from '@/services/api';
 import { Country } from '@/types';
 import TopNavbar from '@/components/layout/TopNavbar';
-import StickySidebar, { MODULES_LIST } from '@/components/layout/StickySidebar';
+import StickySidebar, { MODULES_LIST, AUSTRIA_MODULES_LIST, ModuleItem } from '@/components/layout/StickySidebar';
 
 import OverviewModule from '@/components/modules/OverviewModule';
 import UniversitiesModule from '@/components/modules/UniversitiesModule';
@@ -23,6 +23,16 @@ import CurrencyModule from '@/components/modules/CurrencyModule';
 import OfficialResourcesModule from '@/components/modules/OfficialResourcesModule';
 import FAQModule from '@/components/modules/FAQModule';
 
+/** Returns the appropriate sidebar module list for a given country slug. */
+function getCountryModules(slug: string): ModuleItem[] {
+  switch (slug) {
+    case 'austria':
+      return AUSTRIA_MODULES_LIST; // No APS module for Austria
+    default:
+      return MODULES_LIST; // Germany and future countries use full list
+  }
+}
+
 function DestinationDashboardContent() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -31,14 +41,18 @@ function DestinationDashboardContent() {
   const countrySlug = (params?.countrySlug as string) || 'germany';
   const initialModule = searchParams.get('module') || 'overview';
 
+  // Per-country module list (data-driven, not hardcoded)
+  const countryModules = getCountryModules(countrySlug);
+
   const [country, setCountry] = useState<Country | null>(() => {
-    if (countrySlug === 'germany') {
-      return getFallbackGermanyData();
-    }
+    if (countrySlug === 'germany') return getFallbackGermanyData();
+    if (countrySlug === 'austria') return getFallbackAustriaData();
     return null;
   });
   const [activeModule, setActiveModule] = useState<string>(initialModule);
-  const [isLoading, setIsLoading] = useState<boolean>(() => countrySlug !== 'germany');
+  const [isLoading, setIsLoading] = useState<boolean>(
+    () => countrySlug !== 'germany' && countrySlug !== 'austria'
+  );
 
   useEffect(() => {
     countryService.getBySlug(countrySlug).then((data) => {
@@ -66,7 +80,7 @@ function DestinationDashboardContent() {
     );
   }
 
-  const activeModuleItem = MODULES_LIST.find((m) => m.key === activeModule) || MODULES_LIST[0];
+  const activeModuleItem = countryModules.find((m) => m.key === activeModule) || countryModules[0];
 
   const renderModuleContent = () => {
     switch (activeModule) {
@@ -112,19 +126,20 @@ function DestinationDashboardContent() {
 
       {/* Main Dashboard Layout - Full Screen Ratio */}
       <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex items-start gap-6 flex-1">
-        {/* Sticky Sidebar */}
+        {/* Sticky Sidebar — passes country-specific module list */}
         <StickySidebar
           activeModule={activeModule}
           onSelectModule={handleSelectModule}
           countryName={country.name}
           countryFlag={country.flagEmoji}
+          modulesList={countryModules}
         />
 
         {/* Dynamic Module Content View */}
         <main className="flex-1 min-w-0 pb-16">
           {/* Mobile Module Selector bar */}
           <div className="lg:hidden mb-6 p-2 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm overflow-x-auto flex space-x-1">
-            {MODULES_LIST.map((m) => (
+            {countryModules.map((m) => (
               <button
                 key={m.key}
                 onClick={() => handleSelectModule(m.key)}

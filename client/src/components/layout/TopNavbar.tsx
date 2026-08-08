@@ -31,9 +31,9 @@ const POPULAR_DESTINATIONS = [
 
 const EUROPE_DESTINATIONS = [
   { slug: 'germany',        name: 'Germany',        flag: '🇩🇪', available: true  },
+  { slug: 'austria',        name: 'Austria',        flag: '🇦🇹', available: true  },
   { slug: 'netherlands',    name: 'Netherlands',    flag: '🇳🇱', available: false },
   { slug: 'sweden',         name: 'Sweden',         flag: '🇸🇪', available: false },
-  { slug: 'austria',        name: 'Austria',        flag: '🇦🇹', available: false },
   { slug: 'switzerland',    name: 'Switzerland',    flag: '🇨🇭', available: false },
   { slug: 'italy',          name: 'Italy',          flag: '🇮🇹', available: false },
   { slug: 'spain',          name: 'Spain',          flag: '🇪🇸', available: false },
@@ -248,6 +248,19 @@ export default function TopNavbar({ countryName, activeModuleLabel }: Props) {
               <span className="flex items-center gap-2.5">
                 <span>🇩🇪</span>
                 <span>Germany Destination Hub</span>
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">
+                Live
+              </span>
+            </Link>
+            <Link
+              href="/austria"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-sm font-bold text-slate-900"
+            >
+              <span className="flex items-center gap-2.5">
+                <span>🇦🇹</span>
+                <span>Austria Destination Hub</span>
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">
                 Live

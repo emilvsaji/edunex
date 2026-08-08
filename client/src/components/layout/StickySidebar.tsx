@@ -19,14 +19,22 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+export interface ModuleItem {
+  key: string;
+  label: string;
+  icon: React.ElementType;
+}
+
 interface Props {
   activeModule: string;
   onSelectModule: (moduleKey: string) => void;
   countryName: string;
   countryFlag: string;
+  modulesList?: ModuleItem[];
 }
 
-export const MODULES_LIST = [
+// Full module list — used by Germany (and any country that includes all modules)
+export const MODULES_LIST: ModuleItem[] = [
   { key: 'overview',               label: 'Overview',             icon: LayoutDashboard },
   { key: 'universities',           label: 'Universities',         icon: GraduationCap   },
   { key: 'admission-requirements', label: 'Admission Req.',       icon: FileCheck        },
@@ -44,18 +52,29 @@ export const MODULES_LIST = [
   { key: 'faq',                    label: 'FAQ Hub',              icon: HelpCircle       },
 ];
 
+// Austria module list — excludes APS (not applicable), same order otherwise
+export const AUSTRIA_MODULES_LIST: ModuleItem[] = MODULES_LIST.filter(
+  (m) => m.key !== 'aps'
+);
+
 export default function StickySidebar({
   activeModule,
   onSelectModule,
   countryName,
   countryFlag,
+  modulesList,
 }: Props) {
+  // Use provided list, or fall back to the full default list
+  const items = modulesList ?? MODULES_LIST;
+
   return (
-    <aside className="w-64 shrink-0 hidden lg:block sticky top-20 h-[calc(100vh-5.5rem)] overflow-y-auto p-4 bg-white rounded-3xl"
+    <aside
+      className="w-64 shrink-0 hidden lg:block sticky top-20 h-[calc(100vh-5.5rem)] overflow-y-auto p-4 bg-white rounded-3xl"
       style={{ border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}
     >
       {/* Active Country Header Card */}
-      <div className="p-3 mb-4 rounded-2xl flex items-center space-x-3"
+      <div
+        className="p-3 mb-4 rounded-2xl flex items-center space-x-3"
         style={{ background: '#F7F6F3', border: '1px solid rgba(0,0,0,0.08)' }}
       >
         <span className="text-2xl">{countryFlag}</span>
@@ -71,7 +90,7 @@ export default function StickySidebar({
 
       {/* Nav list */}
       <nav className="space-y-0.5">
-        {MODULES_LIST.map((m) => {
+        {items.map((m) => {
           const Icon = m.icon;
           const isActive = activeModule === m.key;
           return (
